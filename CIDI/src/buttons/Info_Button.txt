@@ -1,0 +1,3 @@
+button.setBackground(null);
+button.setBorder(null);
+button.setBordercolor(null)
