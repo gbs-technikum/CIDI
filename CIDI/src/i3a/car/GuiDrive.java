@@ -35,7 +35,7 @@ import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
-class GuiDrive extends JFrame{
+public class GuiDrive extends JFrame{
     
     private Container c;
     private JButton jbVorwaerts, jbRueckwaerts, jbRechts, jbLinks, jbHupe, jbAbblendlicht, jbFernlicht;
@@ -44,6 +44,7 @@ class GuiDrive extends JFrame{
     private int restMin=15, restSek=0;
     private JPanel jpSitzungsInfo;
     private String nutzerName;
+    private Boolean bfernlicht;
 //    private GuiUser gu;
     
 
@@ -64,25 +65,22 @@ class GuiDrive extends JFrame{
 
     private void initEvents() {
     	
-    	GuiDriveEvent gde = new GuiDriveEvent();
+    	GuiDriveEventWindow gdew = new GuiDriveEventWindow();
+    	GuiDriveEvent gde = new GuiDriveEvent(this);
     	
-        this.addWindowListener(gde);
+        this.addWindowListener(gdew);
     	
-    	jbVerbindungBeenden.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				logout();
-				System.out.println("Beenden");
-			}
-		});
+    	jbVerbindungBeenden.addActionListener(gde);
+    	jbZumWebshop.addActionListener(gde);
     	
-    	jbZumWebshop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Verlinkung zu Browser -> Webshop
-				System.out.println("-> Ab zum Shopping");
-			}
-		});
+    	jbFernlicht.addActionListener(gde);
+    	jbAbblendlicht.addActionListener(gde);
+    	jbHupe.addActionListener(gde);
+    	
+    	jbVorwaerts.addActionListener(gde);
+    	jbRueckwaerts.addActionListener(gde);
+    	jbLinks.addActionListener(gde);    	
+    	jbRechts.addActionListener(gde);
     	
     	int delay = 1000; //milliseconds
 		ActionListener taskPerformer = new ActionListener() {
@@ -113,8 +111,6 @@ class GuiDrive extends JFrame{
 
 	private void initComponent() {
         c= this.getContentPane();
-//        c.setLayout(new GridLayout(2, 1));
-
 
 // Containerbereich Norden
         JPanel jpNorth = new JPanel();
@@ -126,16 +122,16 @@ class GuiDrive extends JFrame{
         JPanel jplinks = new JPanel();
         jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.red,3)));
 //        jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
-        jplinks.setLayout(new BorderLayout());
+        jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
        
         //Stream von Webcam
         JLabel jlTestBild = new JLabel(new ImageIcon("src/i3a/car/bilder/test.jpg"));
         JPanel jpStream = new JPanel();
         jpStream.add(jlTestBild);
-        jplinks.add(jpStream,BorderLayout.NORTH);
+        jplinks.add(jpStream);
         
         //Steuerbereich
-        JPanel jpSteuerbereich = new JPanel();
+  //    JPanel jpSteuerbereich = new JPanel();
         
         //BewegungsTasten
         JPanel jpBewegungsTasten = new JPanel();
@@ -167,22 +163,28 @@ class GuiDrive extends JFrame{
     	bgc.gridy = 1;
     	jpBewegungsTasten.add(jbRechts, bgc);
         
-    	jpSteuerbereich.add(jpBewegungsTasten,BorderLayout.WEST);
+ //   	jpSteuerbereich.add(jpBewegungsTasten,BorderLayout.SOUTH);
         
     	//Funktionstasten
     	JPanel jpFunktionen = new JPanel();
-    	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.Y_AXIS));
+    	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
     	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
-    	jbAbblendlicht = new JButton("Abblendlicht");
-    	jbFernlicht = new JButton("Fernlicht");
+    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlicht.png"));
+    	jbAbblendlicht.setActionCommand("Abblendlicht schalten");
+    	jbFernlicht = new JButton(new ImageIcon("src/buttons/fernlichtDeakt.png"));
+    	jbFernlicht.setActionCommand("Fernlicht schalten");
     	jbHupe = new JButton(new ImageIcon("src/buttons/hupe.png"));
+    	jbHupe.setActionCommand("Hupe");
     	jpFunktionen.add(jbHupe);
     	jpFunktionen.add(jbFernlicht);
     	jpFunktionen.add(jbAbblendlicht);
     	
-    	jpSteuerbereich.add(jpFunktionen,BorderLayout.EAST);
+ //   	jpSteuerbereich.add(jpFunktionen,BorderLayout.NORTH);
     	
-    	jplinks.add(jpSteuerbereich,BorderLayout.CENTER);
+//    	jplinks.add(jpSteuerbereich);
+    	
+    	jplinks.add(jpFunktionen);
+    	jplinks.add(jpBewegungsTasten);
     	
 //Containerbereich Rechts
         JPanel jprechts = new JPanel();
@@ -197,7 +199,7 @@ class GuiDrive extends JFrame{
 
         JPanel jpZahlenVerbZeit = new JPanel();
         jlZahlenVerbZeit = new JLabel("15:00");
-        jlZahlenVerbZeit.setFont(new Font("Arial", Font.PLAIN, 25));
+        jlZahlenVerbZeit.setFont(new Font("Arial", Font.BOLD, 35));
         jpZahlenVerbZeit.add(jlZahlenVerbZeit);
         
         JPanel jpNutzerName = new JPanel();
@@ -219,7 +221,7 @@ class GuiDrive extends JFrame{
 
 //Containerbereich South
         JPanel jpSouth = new JPanel(new BorderLayout());
-        JLabel jlCopyRight = new JLabel("© all rights reserved for the best Class!");
+        JLabel jlCopyRight = new JLabel("© all rights reserved for the best Class - I4a!");
         jbZumWebshop = new JButton("Zum WebShop");
         
         jpSouth.add(jlCopyRight,BorderLayout.WEST);
@@ -238,6 +240,17 @@ class GuiDrive extends JFrame{
     public static void main(String[] args) {
     //	GuiUser gu = new GuiUser();
 		GuiDrive gd = new GuiDrive();
+	}
+    
+    public void fernlichtSchalten() {
+
+		if(!bfernlicht){
+			jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtDeakt.png"));
+			this.bfernlicht = true;
+		}else{
+			jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtAkt.png"));
+			this.bfernlicht = false;
+		}
 	}
     
 	private void logout() {

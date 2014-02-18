@@ -10,51 +10,76 @@
  */
 package i3a.car;
 
-import static java.awt.Frame.NORMAL;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+
+import i3a.car.GuiStart;
 
 
-class GuiDriveEvent implements WindowListener{
+public class GuiDriveEvent implements ActionListener{
+	
+	private GuiDrive jf;
+	private GuiStart gs;
+	
+	public GuiDriveEvent(JFrame jfextern) {
+		if(jfextern.getTitle().contains("Login")){
+			this.gs = (GuiStart) jfextern;			
+		} else {	
+			this.jf = (GuiDrive) jfextern;
+		}
+	}
 
-    @Override
-    public void windowOpened(WindowEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		String event = e.getActionCommand();
+		
+		System.out.println(event);
+//		System.out.println(e);
+		
+		switch (event) {
+		case "Weiter zur Anmeldung!":
+			jf.setVisible(false);
+			break;
 
-    }
+		case "Sitzung Beenden":
+			jf.setVisible(false);
+			logout();
+			break;
+			
+		case "Zum Webshop":
+			//Start internet Explorer -> Amazon oder sonst was
+			System.out.println("Ab zum Webshop!");
+			break;
+			
+		case "Hupe":
+			//Bild ändern
+			System.out.println("Hup Hup");
+			break;
+			
+		case "Fernlicht schalten":
+			jf.fernlichtSchalten();
+			break;
+			
+		case "Abblendlicht schalten":
+			//Bild ändern
+			System.out.println("Hup Hup");
+			break;
+		default:
+			break;
+		}
+		
+	}
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-        int result = JOptionPane.showConfirmDialog(null, "Wollen Sie das Programm wirklich beenden?","Programm beenden?", JOptionPane.YES_NO_OPTION);
-	if(result==JOptionPane.YES_OPTION)
-		System.exit(NORMAL);
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-        
-    }
+	private void logout() {
+		// sitzung Infos in Datenbank speichern!
+		// Stream etc beenden
+		// Sitzung für nächsten Freimachen!"
+		System.out.println("logout");
+		
+	}
 
 
 }

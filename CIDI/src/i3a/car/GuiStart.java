@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 
-
 public class GuiStart extends JFrame{ 
 
 	private Container c;
@@ -18,8 +17,8 @@ public class GuiStart extends JFrame{
 
 	public GuiStart () {
 		this.setTitle("\"Connect it, Drive it!\" - Login");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.setLocation(200,200);
         this.initComponent();
         this.initEvents();
         this.pack();
@@ -29,15 +28,12 @@ public class GuiStart extends JFrame{
     }
     
     private void initEvents() {
-		jbanmelden.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new GuiUser();
-			}
-		});
-		
+    	
+    	GuiDriveEvent gde = new GuiDriveEvent(this);
+    	GuiDriveEventWindow gdew = new GuiDriveEventWindow();
+    	
+    	this.addWindowListener(gdew);    	
+    	jbanmelden.addActionListener(gde);
 	}
 
 	private void initComponent() {
@@ -65,6 +61,7 @@ public class GuiStart extends JFrame{
 		
 	}
 
+	
 	public static void main (String [] args) {
         new GuiStart();
     }
