@@ -15,20 +15,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
-import i3a.car.GuiStart;
-
-
 public class GuiDriveEvent implements ActionListener{
 	
 	private GuiDrive jf;
-	private GuiStart gs;
 	
 	public GuiDriveEvent(JFrame jfextern) {
-		if(jfextern.getTitle().contains("Login")){
-			this.gs = (GuiStart) jfextern;			
-		} else {	
 			this.jf = (GuiDrive) jfextern;
-		}
 	}
 
 	@Override
@@ -64,7 +56,7 @@ public class GuiDriveEvent implements ActionListener{
 			break;
 			
 		case "Abblendlicht schalten":
-			//Bild ändern
+			jf.abblendlichtSchalten();
 			System.out.println("Hup Hup");
 			break;
 		default:

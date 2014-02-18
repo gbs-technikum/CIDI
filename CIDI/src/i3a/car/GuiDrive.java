@@ -20,6 +20,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -44,8 +45,12 @@ public class GuiDrive extends JFrame{
     private int restMin=15, restSek=0;
     private JPanel jpSitzungsInfo;
     private String nutzerName;
-    private Boolean bfernlicht;
-//    private GuiUser gu;
+    private Boolean bfernlicht = false, babblendlicht = false;
+
+ //Action zeug Listener
+    private GuiDriveEvent gde;
+    private GuiDriveEventWindow gdew;
+    private GuiDriveEventMouse gdem;
     
 
     public GuiDrive(/*GuiUser aktuelleSitzung*/) {
@@ -65,8 +70,9 @@ public class GuiDrive extends JFrame{
 
     private void initEvents() {
     	
-    	GuiDriveEventWindow gdew = new GuiDriveEventWindow();
-    	GuiDriveEvent gde = new GuiDriveEvent(this);
+    	gdew = new GuiDriveEventWindow();
+    	gde = new GuiDriveEvent(this);
+    	gdem = new GuiDriveEventMouse(this);
     	
         this.addWindowListener(gdew);
     	
@@ -75,7 +81,7 @@ public class GuiDrive extends JFrame{
     	
     	jbFernlicht.addActionListener(gde);
     	jbAbblendlicht.addActionListener(gde);
-    	jbHupe.addActionListener(gde);
+    	jbHupe.addMouseListener(gdem);
     	
     	jbVorwaerts.addActionListener(gde);
     	jbRueckwaerts.addActionListener(gde);
@@ -98,7 +104,7 @@ public class GuiDrive extends JFrame{
 		          jlZahlenVerbZeit.setText(wMin+":"+wSek);
 		          System.out.println(wMin+":"+wSek);
 		          if(restMin==0 && restSek==0){
-		        	  logout();
+		        	  jbVerbindungBeenden.addActionListener(gde);
 		     
 		          }else if(restMin==0 && restSek==0){
 		        	  restMin=15;
@@ -169,7 +175,7 @@ public class GuiDrive extends JFrame{
     	JPanel jpFunktionen = new JPanel();
     	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
     	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
-    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlicht.png"));
+    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlichtDeakt.png"));
     	jbAbblendlicht.setActionCommand("Abblendlicht schalten");
     	jbFernlicht = new JButton(new ImageIcon("src/buttons/fernlichtDeakt.png"));
     	jbFernlicht.setActionCommand("Fernlicht schalten");
@@ -236,30 +242,41 @@ public class GuiDrive extends JFrame{
         
 
     }
+	
+    protected void fernlichtSchalten() {
+		if(!(bfernlicht)){
+			this.jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtAkt.png"));
+			this.bfernlicht = true;
+		}else{
+			this.jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtDeakt.png"));
+			this.bfernlicht = false;
+		}
+	}
+    
+    protected void abblendlichtSchalten() {
+		if(!(babblendlicht)){
+			this.jbAbblendlicht.setIcon(new ImageIcon("src/buttons/abblendlichtAkt.png"));
+			this.babblendlicht = true;
+		}else{
+			this.jbAbblendlicht.setIcon(new ImageIcon("src/buttons/abblendlichtDeakt.png"));
+			this.babblendlicht = false;
+		}
+	}
+    
+    protected void hupenAn(){
+    	this.jbHupe.setIcon(new ImageIcon("src/buttons/huperot.png"));
+    }
+    
+    protected void hupenAus(){
+    	this.jbHupe.setIcon(new ImageIcon("src/buttons/hupe.png"));
+    }
     
     public static void main(String[] args) {
     //	GuiUser gu = new GuiUser();
 		GuiDrive gd = new GuiDrive();
 	}
+       
     
-    public void fernlichtSchalten() {
-
-		if(!bfernlicht){
-			jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtDeakt.png"));
-			this.bfernlicht = true;
-		}else{
-			jbFernlicht.setIcon(new ImageIcon("src/buttons/fernlichtAkt.png"));
-			this.bfernlicht = false;
-		}
-	}
-    
-	private void logout() {
-		//Sitzung soll abgebrochen werden
-		System.out.println("Benutzer soll ausgeloggt werden!");
-		this.setVisible(false);
-		// GuiUser.setVisible(true);
-		//Verbindung mit SQL abgebaut bla bla usw... 
-	}
 }
 /*
 button.setBackground(null);
