@@ -82,6 +82,8 @@ public class GuiDrive extends JFrame{
     	jbFernlicht.addActionListener(gde);
     	jbAbblendlicht.addActionListener(gde);
     	jbHupe.addMouseListener(gdem);
+//    	jbHupe.addActionListener(gde);
+    	
     	
     	jbVorwaerts.addActionListener(gde);
     	jbRueckwaerts.addActionListener(gde);
@@ -119,10 +121,7 @@ public class GuiDrive extends JFrame{
         c= this.getContentPane();
 
 // Containerbereich Norden
-        JPanel jpNorth = new JPanel();
-        JLabel jlSlogen = new JLabel("Connect it, Drive it!");
-        jlSlogen.setFont(new Font("Arial", 12, 35));
-        jpNorth.add(jlSlogen);
+        JPanel jpNorth = fcontainerNorden();
         
 //Containerbereich Links
         JPanel jplinks = new JPanel();
@@ -131,69 +130,46 @@ public class GuiDrive extends JFrame{
         jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
        
         //Stream von Webcam
-        JLabel jlTestBild = new JLabel(new ImageIcon("src/i3a/car/bilder/test.jpg"));
-        JPanel jpStream = new JPanel();
-        jpStream.add(jlTestBild);
-        jplinks.add(jpStream);
-        
-        //Steuerbereich
-  //    JPanel jpSteuerbereich = new JPanel();
+        JPanel jpStream = fStream();
         
         //BewegungsTasten
-        JPanel jpBewegungsTasten = new JPanel();
-        jpBewegungsTasten.setBorder(new CompoundBorder(jpBewegungsTasten.getBorder(), new LineBorder(Color.green,3)));
-        GridBagConstraints bgc = new GridBagConstraints();
-    	jpBewegungsTasten.setLayout(new GridBagLayout());
-       
-        jbVorwaerts = new JButton(new ImageIcon("src/buttons/up.png"));
-    	bgc.fill = GridBagConstraints.HORIZONTAL;
-    	bgc.gridx = 1;
-    	bgc.gridy = 0;
-    	jpBewegungsTasten.add(jbVorwaerts, bgc);
-        
-        jbLinks = new JButton(new ImageIcon("src/buttons/left.png"));
-    	bgc.fill = GridBagConstraints.HORIZONTAL;
-    	bgc.gridx = 0;
-    	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbLinks, bgc);
-    	
-        jbRueckwaerts = new JButton(new ImageIcon("src/buttons/down.png"));
-    	bgc.fill = GridBagConstraints.HORIZONTAL;
-    	bgc.gridx = 1;
-    	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbRueckwaerts, bgc);
-    	
-        jbRechts = new JButton(new ImageIcon("src/buttons/right.png"));
-    	bgc.fill = GridBagConstraints.HORIZONTAL;
-    	bgc.gridx = 2;
-    	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbRechts, bgc);
-        
- //   	jpSteuerbereich.add(jpBewegungsTasten,BorderLayout.SOUTH);
+        JPanel jpBewegungsTasten = fSteuertasten();
         
     	//Funktionstasten
-    	JPanel jpFunktionen = new JPanel();
-    	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
-    	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
-    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlichtDeakt.png"));
-    	jbAbblendlicht.setActionCommand("Abblendlicht schalten");
-    	jbFernlicht = new JButton(new ImageIcon("src/buttons/fernlichtDeakt.png"));
-    	jbFernlicht.setActionCommand("Fernlicht schalten");
-    	jbHupe = new JButton(new ImageIcon("src/buttons/hupe.png"));
-    	jbHupe.setActionCommand("Hupe");
-    	jpFunktionen.add(jbHupe);
-    	jpFunktionen.add(jbFernlicht);
-    	jpFunktionen.add(jbAbblendlicht);
+    	JPanel jpFunktionen = fFunktionstasten();
     	
- //   	jpSteuerbereich.add(jpFunktionen,BorderLayout.NORTH);
     	
-//    	jplinks.add(jpSteuerbereich);
-    	
+        jplinks.add(jpStream);
     	jplinks.add(jpFunktionen);
     	jplinks.add(jpBewegungsTasten);
     	
 //Containerbereich Rechts
-        JPanel jprechts = new JPanel();
+        JPanel jprechts = fcontainerRechts();
+               
+
+//Containerbereich South
+        JPanel jpSouth = fcontainerSouth();
+        
+ //Auf Container zambauen
+        c.add(jpSouth,BorderLayout.SOUTH);
+        c.add(jpNorth,BorderLayout.NORTH);
+        c.add(jprechts,BorderLayout.EAST);
+        c.add(jplinks,BorderLayout.CENTER);
+
+    }
+
+	private JPanel fcontainerSouth() {
+		JPanel jpSouth = new JPanel(new BorderLayout());
+        JLabel jlCopyRight = new JLabel("© all rights reserved for the best Class - I4a!");
+        jbZumWebshop = new JButton("Zum WebShop");
+        
+        jpSouth.add(jlCopyRight,BorderLayout.WEST);
+    	jpSouth.add(jbZumWebshop,BorderLayout.EAST);
+		return jpSouth;
+	}
+
+	private JPanel fcontainerRechts() {
+		JPanel jprechts = new JPanel();
         jprechts.setLayout(new BoxLayout(jprechts, BoxLayout.Y_AXIS));
         jpSitzungsInfo = new JPanel();
         jpSitzungsInfo.setLayout(new BoxLayout(jpSitzungsInfo,BoxLayout.Y_AXIS));
@@ -223,25 +199,71 @@ public class GuiDrive extends JFrame{
         
         jprechts.add(jpSitzungsInfo);
         jprechts.add(jpButtonVerbindungBeenden);
-               
+		return jprechts;
+	}
 
-//Containerbereich South
-        JPanel jpSouth = new JPanel(new BorderLayout());
-        JLabel jlCopyRight = new JLabel("© all rights reserved for the best Class - I4a!");
-        jbZumWebshop = new JButton("Zum WebShop");
-        
-        jpSouth.add(jlCopyRight,BorderLayout.WEST);
-    	jpSouth.add(jbZumWebshop,BorderLayout.EAST);
-        
- //Auf Container zambauen
-        c.add(jpSouth,BorderLayout.SOUTH);
-        c.add(jpNorth,BorderLayout.NORTH);
-        c.add(jprechts,BorderLayout.EAST);
-        c.add(jplinks,BorderLayout.CENTER);
+	private JPanel fFunktionstasten() {
+		JPanel jpFunktionen = new JPanel();
+    	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
+    	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
+    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlichtDeakt.png"));
+    	jbAbblendlicht.setActionCommand("Abblendlicht schalten");
+    	jbFernlicht = new JButton(new ImageIcon("src/buttons/fernlichtDeakt.png"));
+    	jbFernlicht.setActionCommand("Fernlicht schalten");
+    	jbHupe = new JButton(new ImageIcon("src/buttons/hupe.png"));
+    	jbHupe.setActionCommand("Hupe");
+    	jpFunktionen.add(jbHupe);
+    	jpFunktionen.add(jbFernlicht);
+    	jpFunktionen.add(jbAbblendlicht);
+		return jpFunktionen;
+	}
 
+	private JPanel fSteuertasten() {
+		JPanel jpBewegungsTasten = new JPanel();
+        jpBewegungsTasten.setBorder(new CompoundBorder(jpBewegungsTasten.getBorder(), new LineBorder(Color.green,3)));
+        GridBagConstraints bgc = new GridBagConstraints();
+    	jpBewegungsTasten.setLayout(new GridBagLayout());
+       
+        jbVorwaerts = new JButton(new ImageIcon("src/buttons/up.png"));
+    	bgc.fill = GridBagConstraints.HORIZONTAL;
+    	bgc.gridx = 1;
+    	bgc.gridy = 0;
+    	jpBewegungsTasten.add(jbVorwaerts, bgc);
         
+        jbLinks = new JButton(new ImageIcon("src/buttons/left.png"));
+    	bgc.fill = GridBagConstraints.HORIZONTAL;
+    	bgc.gridx = 0;
+    	bgc.gridy = 1;
+    	jpBewegungsTasten.add(jbLinks, bgc);
+    	
+        jbRueckwaerts = new JButton(new ImageIcon("src/buttons/down.png"));
+    	bgc.fill = GridBagConstraints.HORIZONTAL;
+    	bgc.gridx = 1;
+    	bgc.gridy = 1;
+    	jpBewegungsTasten.add(jbRueckwaerts, bgc);
+    	
+        jbRechts = new JButton(new ImageIcon("src/buttons/right.png"));
+    	bgc.fill = GridBagConstraints.HORIZONTAL;
+    	bgc.gridx = 2;
+    	bgc.gridy = 1;
+    	jpBewegungsTasten.add(jbRechts, bgc);
+		return jpBewegungsTasten;
+	}
 
-    }
+	private JPanel fStream() {
+		JLabel jlTestBild = new JLabel(new ImageIcon("src/i3a/car/bilder/test.jpg"));
+        JPanel jpStream = new JPanel();
+        jpStream.add(jlTestBild);
+		return jpStream;
+	}
+
+	private JPanel fcontainerNorden() {
+		JPanel jpNorth = new JPanel();
+        JLabel jlSlogen = new JLabel("Connect it, Drive it!");
+        jlSlogen.setFont(new Font("Arial", 12, 35));
+        jpNorth.add(jlSlogen);
+		return jpNorth;
+	}
 	
     protected void fernlichtSchalten() {
 		if(!(bfernlicht)){
@@ -265,6 +287,7 @@ public class GuiDrive extends JFrame{
     
     protected void hupenAn(){
     	this.jbHupe.setIcon(new ImageIcon("src/buttons/huperot.png"));
+    	System.out.println("Hup Hup!");
     }
     
     protected void hupenAus(){
