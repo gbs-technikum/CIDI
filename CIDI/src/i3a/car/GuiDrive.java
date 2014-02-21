@@ -48,7 +48,7 @@ public class GuiDrive extends JFrame{
     private Boolean bfernlicht = false, babblendlicht = false;
 
  //Action zeug Listener
-    private GuiDriveEvent gde;
+    private GuiDriveEventAction gde;
     private GuiDriveEventWindow gdew;
     private GuiDriveEventMouse gdem;
     
@@ -71,7 +71,7 @@ public class GuiDrive extends JFrame{
     private void initEvents() {
     	
     	gdew = new GuiDriveEventWindow();
-    	gde = new GuiDriveEvent(this);
+    	gde = new GuiDriveEventAction(this);
     	gdem = new GuiDriveEventMouse(this);
     	
         this.addWindowListener(gdew);
@@ -126,7 +126,6 @@ public class GuiDrive extends JFrame{
 //Containerbereich Links
         JPanel jplinks = new JPanel();
         jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.red,3)));
-//        jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
         jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
        
         //Stream von Webcam

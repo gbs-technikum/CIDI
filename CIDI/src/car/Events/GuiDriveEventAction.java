@@ -8,19 +8,31 @@
  * @version 0.0.1
  *
  */
-package i3a.car;
+package car.Events;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class GuiDriveEvent implements ActionListener{
+import car.Gui.GuiJFrameMain;
+import car.Gui.GuiJPLogin;
+
+public class GuiDriveEventAction implements ActionListener{
 	
-	private GuiDrive jf;
+	private GuiJFrameMain guiMain;
+	private JPanel jpExtern;
+	private GuiJPLogin guiLogin;
 	
-	public GuiDriveEvent(JFrame jfextern) {
-			this.jf = (GuiDrive) jfextern;
+	public GuiDriveEventAction(GuiJFrameMain guiMain) {
+		this.guiMain = guiMain;
+	}
+
+	public GuiDriveEventAction(GuiJPLogin guiLogin, GuiJFrameMain guiMain) {
+		this.guiLogin = guiLogin;
+		this.guiMain = guiMain;
 	}
 
 	@Override
@@ -32,12 +44,24 @@ public class GuiDriveEvent implements ActionListener{
 //		System.out.println(e);
 		
 		switch (event) {
-		case "Weiter zur Anmeldung!":
-			jf.setVisible(false);
+		case "ZumLogin":
+			System.out.println("-> Zum Login");
+			guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
 			break;
 
+		case "Abbrechen":
+			System.out.println("-> Abbrechen");
+//			(GuiJPLogin)jpExtern.
+			
+			break;
+		
+		case "Anmelden":
+			if(this.guiLogin.checkLogin()){
+				guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
+			} 			
+			break;
+			
 		case "Sitzung Beenden":
-			jf.setVisible(false);
 			logout();
 			break;
 			
@@ -52,12 +76,11 @@ public class GuiDriveEvent implements ActionListener{
 			break;
 			
 		case "Fernlicht schalten":
-			jf.fernlichtSchalten();
+//			jf.fernlichtSchalten();
 			break;
 			
 		case "Abblendlicht schalten":
-			jf.abblendlichtSchalten();
-			System.out.println("Hup Hup");
+//			jf.abblendlichtSchalten();
 			break;
 		default:
 			break;

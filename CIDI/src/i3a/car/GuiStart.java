@@ -20,7 +20,7 @@ public class GuiStart extends JFrame{
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setLocation(200,200);
         this.initComponent();
-        this.initEvents();
+        initEvents();
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
@@ -29,11 +29,11 @@ public class GuiStart extends JFrame{
     
     private void initEvents() {
     	
-    	GuiDriveEvent gde = new GuiDriveEvent(this);
-    	GuiDriveEventWindow gdew = new GuiDriveEventWindow();
-    	
-    	this.addWindowListener(gdew);    	
-    	jbanmelden.addActionListener(gde);
+//    	GuiDriveEvent gde = new GuiDriveEvent(this);
+//    	GuiDriveEventWindow gdew = new GuiDriveEventWindow();
+//    	
+//    	this.addWindowListener(gdew);    	
+//    	jbanmelden.addActionListener(gde);
 	}
 
 	private void initComponent() {

@@ -121,8 +121,8 @@ public class GuiUser extends JFrame {
        jpright.add(jlcam);
        
        JLabel jlimg = new JLabel();
-       ImageIcon img1 = new ImageIcon(getClass().getResource("test.jpg"));
-       jlimg.setIcon(img1);
+//       ImageIcon img1 = new ImageIcon(getClass().getResource("test.jpg"));
+//       jlimg.setIcon(img1);
        
        jpright.add(jlimg);
        
@@ -248,7 +248,6 @@ public class GuiUser extends JFrame {
 				jbanmelden.setEnabled(false);
 				jtuser.setEditable(false);
 				jpassword.setEditable(false);
-				jbabbrechen.setText("Abmelden");
 				return true;
 			}
 			else
@@ -270,5 +269,9 @@ public class GuiUser extends JFrame {
 
 	public String getNutzerName(){
 		return jtuser.getText();
+	}
+	
+	public static void main(String[] args) {
+		GuiUser gu = new GuiUser();
 	}
 }

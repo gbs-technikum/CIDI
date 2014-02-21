@@ -8,7 +8,7 @@
  * @version 0.0.1
  *
  */
-package i3a.car;
+package car.Events;
 
 import static java.awt.Frame.NORMAL;
 import java.awt.event.WindowEvent;
@@ -16,7 +16,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JOptionPane;
 
 
-class GuiDriveEventWindow implements WindowListener{
+public class GuiDriveWindowEvent implements WindowListener{
 
     @Override
     public void windowOpened(WindowEvent e) {
