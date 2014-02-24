@@ -25,7 +25,7 @@ public class GuiJPStart extends JPanel{
 	}
 
 	private void initEvents() {
-		gdea = new GuiDriveEventAction(this, guiMain);
+		gdea = new GuiDriveEventAction(guiMain);
 		
 		jbZurAnmeldung.addActionListener(gdea);
 		

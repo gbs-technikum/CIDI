@@ -55,29 +55,11 @@ public class GuiJPLogin extends JPanel{
 		
 		GuiDriveEventKey gdek = new GuiDriveEventKey(this, guiMain);
 		
-		jbabbrechen.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jtuser.setText("");
-				jpassword.setText("");
-				jtuser.requestFocus();
-			}
-		});
+		jbabbrechen.addActionListener(gdea);
 		
 		jbanmelden.addActionListener(gdea);
 		
-		jbanmelden.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(isEmpty((JTextField) jtuser))
-					JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
-				else if(isEmpty((JTextField) jpassword))
-					JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
-				else if(checkLogin()){
-					//-> Anmelden
-				}
-			}
-		});
+		jbanmelden.addActionListener(gdea);
 		
 		jtuser.setInputVerifier(new InputVerifier() {
 			@Override
@@ -230,7 +212,6 @@ public class GuiJPLogin extends JPanel{
 	}
     
 	public boolean checkLogin() {
-		
 		if(isEmpty((JTextField) jtuser))
 			JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
 		else if(isEmpty((JTextField) jpassword))
@@ -265,7 +246,11 @@ public class GuiJPLogin extends JPanel{
 	public void setJpassword(JPasswordField jpassword) {
 		this.jpassword = jpassword;
 	}
-    
-	
+
+	public void felderLoeschen() {
+		jtuser.setText("");
+		jpassword.setText("");
+		jtuser.requestFocus();
+	}
 	
 }

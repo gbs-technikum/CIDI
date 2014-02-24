@@ -10,21 +10,19 @@
  */
 package car.Events;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
+import car.Elemente.CIDIButton;
 import car.Gui.GuiJFrameMain;
 import car.Gui.GuiJPLogin;
 
 public class GuiDriveEventAction implements ActionListener{
 	
 	private GuiJFrameMain guiMain;
-	private JPanel jpExtern;
 	private GuiJPLogin guiLogin;
+	
+	private CIDIButton cb;
 	
 	public GuiDriveEventAction(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
@@ -50,12 +48,13 @@ public class GuiDriveEventAction implements ActionListener{
 			break;
 
 		case "Abbrechen":
+			//Felder löschen
 			System.out.println("-> Abbrechen");
-//			(GuiJPLogin)jpExtern.
-			
+			this.guiLogin.felderLoeschen();
 			break;
 		
 		case "Anmelden":
+			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			if(this.guiLogin.checkLogin()){
 				guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
 			} 			
@@ -70,7 +69,7 @@ public class GuiDriveEventAction implements ActionListener{
 			System.out.println("Ab zum Webshop!");
 			break;
 			
-		case "Hupe":
+		case "Hupe schalten":
 			//Bild ändern
 			System.out.println("Hup Hup");
 			break;

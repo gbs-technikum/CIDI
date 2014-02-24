@@ -14,12 +14,15 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
+import car.Elemente.CIDIButton;
+import car.Events.GuiDriveEventMouse;
+
 public class GuiJPDrive extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private GuiJFrameMain guiMain;
 	
-	private JButton jbVorwaerts, jbRueckwaerts, jbRechts, jbLinks, jbHupe, jbAbblendlicht, jbFernlicht;
+	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
     private JButton jbZumWebshop, jbVerbindungBeenden;
     private JLabel jlZahlenVerbZeit;
     
@@ -36,7 +39,13 @@ public class GuiJPDrive extends JPanel{
     }
 
 	private void initEvents() {
-		// TODO Auto-generated method stub
+		cbAbblendlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbAbblendlicht));
+		cbFernlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbFernlicht));
+		cbHupe.getButton().addMouseListener(new GuiDriveEventMouse(cbHupe));
+		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts));
+		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks));
+		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts));
+		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts));
 		
 	}
 
@@ -123,16 +132,13 @@ public class GuiJPDrive extends JPanel{
 		JPanel jpFunktionen = new JPanel();
     	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
     	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
-    	jbAbblendlicht = new JButton(new ImageIcon("src/buttons/abblendlicht_inaktiv.png"));
-    	jbAbblendlicht.setActionCommand("Abblendlicht schalten");
-    	jbFernlicht = new JButton(new ImageIcon("src/buttons/fernlicht_inaktiv.png"));
-    	jbFernlicht.setActionCommand("Fernlicht schalten");
-    	jbHupe = new JButton(new ImageIcon("src/buttons/hupe_inaktiv.png"));
-    	jbHupe.setActionCommand("Hupe");
+    	cbAbblendlicht = new CIDIButton(iiAbblendlichtArray, "Abblendlicht schalten");
+    	cbFernlicht = new CIDIButton(iiFernlichtArray, "Fernlicht schalten");
+    	cbHupe = new CIDIButton(iiHupeArray, "Hupe schalten");
     	
-    	jpFunktionen.add(jbHupe);
-    	jpFunktionen.add(jbFernlicht);
-    	jpFunktionen.add(jbAbblendlicht);
+    	jpFunktionen.add(cbHupe.getButton());
+    	jpFunktionen.add(cbFernlicht.getButton());
+    	jpFunktionen.add(cbAbblendlicht.getButton());
 		
     	return jpFunktionen;
 	}
@@ -143,29 +149,29 @@ public class GuiJPDrive extends JPanel{
         GridBagConstraints bgc = new GridBagConstraints();
     	jpBewegungsTasten.setLayout(new GridBagLayout());
        
-        jbVorwaerts = new JButton(new ImageIcon("src/buttons/oben_inaktiv.png"));
+        cbVorwaerts = new CIDIButton(iiObenArray, "Vorwaerts");
     	bgc.fill = GridBagConstraints.HORIZONTAL;
     	bgc.gridx = 1;
     	bgc.gridy = 0;
-    	jpBewegungsTasten.add(jbVorwaerts, bgc);
+    	jpBewegungsTasten.add(cbVorwaerts.getButton(), bgc);
         
-        jbLinks = new JButton(new ImageIcon("src/buttons/links_inaktiv.png"));
+        cbLinks = new CIDIButton(iiLinksArray, "Links");
     	bgc.fill = GridBagConstraints.HORIZONTAL;
     	bgc.gridx = 0;
     	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbLinks, bgc);
+    	jpBewegungsTasten.add(cbLinks.getButton(), bgc);
     	
-        jbRueckwaerts = new JButton(new ImageIcon("src/buttons/unten_inaktiv.png"));
+        cbRueckwaerts = new CIDIButton(iiUntenArray, "Rueckwaerts");
     	bgc.fill = GridBagConstraints.HORIZONTAL;
     	bgc.gridx = 1;
     	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbRueckwaerts, bgc);
+    	jpBewegungsTasten.add(cbRueckwaerts.getButton(), bgc);
     	
-        jbRechts = new JButton(new ImageIcon("src/buttons/rechts_inaktiv.png"));
+        cbRechts = new CIDIButton(iiRechtsArray, "Rechts");
     	bgc.fill = GridBagConstraints.HORIZONTAL;
     	bgc.gridx = 2;
     	bgc.gridy = 1;
-    	jpBewegungsTasten.add(jbRechts, bgc);
+    	jpBewegungsTasten.add(cbRechts.getButton(), bgc);
     	
 		return jpBewegungsTasten;
 	}

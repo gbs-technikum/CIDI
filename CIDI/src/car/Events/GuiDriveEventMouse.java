@@ -3,28 +3,28 @@ package car.Events;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import car.Elemente.CIDIButton;
+
 public class GuiDriveEventMouse implements MouseListener{
 
-	private GuiDrive gd;
+	private CIDIButton cb;
 	
-	public GuiDriveEventMouse(GuiDrive gdextern){
-		this.gd = gdextern;
+	public GuiDriveEventMouse(CIDIButton cbExtern){
+		this.cb = cbExtern;
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		this.gd.hupenAn();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
-		this.gd.hupenAn();
+		this.cb.bildSchalten();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		this.gd.hupenAus();
+		this.cb.bildSchalten();
 	}
 
 	@Override

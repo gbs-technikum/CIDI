@@ -63,7 +63,7 @@ public class GuiJFrameMain extends JFrame{
 		gjs = new GuiJPStart(this);
 		gjl = new GuiJPLogin(this);
 		gjd = new GuiJPDrive(this);
-		c.add(gjs, BorderLayout.CENTER);
+		c.add(gjd, BorderLayout.CENTER);
 	}
 //****************************************************************
 	
