@@ -14,7 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
+import com.sun.corba.se.impl.transport.CorbaInboundConnectionCacheImpl;
+
 import car.Elemente.CIDIButton;
+import car.Events.GuiDriveEventAction;
+import car.Events.GuiDriveEventKey;
 import car.Events.GuiDriveEventMouse;
 
 public class GuiJPDrive extends JPanel{
@@ -23,7 +27,7 @@ public class GuiJPDrive extends JPanel{
 	private GuiJFrameMain guiMain;
 	
 	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
-    private JButton jbZumWebshop, jbVerbindungBeenden;
+    private JButton jbVerbindungBeenden;
     private JLabel jlZahlenVerbZeit;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
@@ -39,13 +43,30 @@ public class GuiJPDrive extends JPanel{
     }
 
 	private void initEvents() {
-		cbAbblendlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbAbblendlicht));
-		cbFernlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbFernlicht));
+		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
+		
+		//GuiDriveEventAciton - Breich
+		cbFernlicht.getButton().addActionListener(gdea);
+		cbAbblendlicht.getButton().addActionListener(gdea);
+		cbHupe.getButton().addActionListener(gdea);
+		cbVorwaerts.getButton().addActionListener(gdea);
+		jbVerbindungBeenden.addActionListener(gdea);
+		
+		//GuiDriveEventMouse - Breich		
 		cbHupe.getButton().addMouseListener(new GuiDriveEventMouse(cbHupe));
 		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts));
 		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks));
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts));
 		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts));
+		
+		
+		//GuiDriveEventKey - Bereich
+		GuiDriveEventKey gdek = new GuiDriveEventKey();
+		cbVorwaerts.getButton().addKeyListener(gdek);
+		
+		// -> Testebekommen wenn Focus drauf gesetzt ist.
+		cbVorwaerts.getButton().setMnemonic('w');
+		
 		
 	}
 
@@ -206,4 +227,16 @@ public class GuiJPDrive extends JPanel{
 	    iiHupeArray[1] = new ImageIcon("src/buttons/hupe_aktiv.png");
 	}
 	
+	public CIDIButton getFernlichtButton(){
+		return this.cbFernlicht;
+	}
+	
+	public CIDIButton getAbblendlichtButton(){
+		return this.cbAbblendlicht;
+	}
+
+	public CIDIButton getVorwarets(){
+		return this.cbVorwaerts;
+	}
 }
+

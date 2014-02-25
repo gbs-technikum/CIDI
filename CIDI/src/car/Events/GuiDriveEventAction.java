@@ -13,16 +13,15 @@ package car.Events;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import car.Elemente.CIDIButton;
 import car.Gui.GuiJFrameMain;
+import car.Gui.GuiJPDrive;
 import car.Gui.GuiJPLogin;
 
 public class GuiDriveEventAction implements ActionListener{
 	
 	private GuiJFrameMain guiMain;
 	private GuiJPLogin guiLogin;
-	
-	private CIDIButton cb;
+	private GuiJPDrive guiDrive;
 	
 	public GuiDriveEventAction(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
@@ -33,6 +32,11 @@ public class GuiDriveEventAction implements ActionListener{
 		this.guiMain = guiMain;
 	}
 
+	public GuiDriveEventAction(GuiJPDrive guiDrive, GuiJFrameMain guiMain) {
+		this.guiDrive = guiDrive;
+		this.guiMain = guiMain;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -75,12 +79,19 @@ public class GuiDriveEventAction implements ActionListener{
 			break;
 			
 		case "Fernlicht schalten":
-//			jf.fernlichtSchalten();
+			guiDrive.getFernlichtButton().bildSchalten();
 			break;
 			
 		case "Abblendlicht schalten":
-//			jf.abblendlichtSchalten();
+			guiDrive.getAbblendlichtButton().bildSchalten();
 			break;
+	
+		//Versuch
+//		case "Vorwaerts":
+//			System.out.println("-> Vorwaerts");
+//			new GuiDriveEventMouse(guiDrive.getVorwarets());
+//			break;
+//			
 		default:
 			break;
 		}
@@ -92,6 +103,7 @@ public class GuiDriveEventAction implements ActionListener{
 		// Stream etc beenden
 		// Sitzung für nächsten Freimachen!"
 		System.out.println("logout");
+		guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
 		
 	}
 

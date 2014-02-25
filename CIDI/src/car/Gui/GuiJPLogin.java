@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
@@ -53,37 +51,14 @@ public class GuiJPLogin extends JPanel{
 
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		
-		GuiDriveEventKey gdek = new GuiDriveEventKey(this, guiMain);
+		GuiDriveEventKey gdek = new GuiDriveEventKey(this);
 		
 		jbabbrechen.addActionListener(gdea);
-		
 		jbanmelden.addActionListener(gdea);
 		
-		jbanmelden.addActionListener(gdea);
-		
-		jtuser.setInputVerifier(new InputVerifier() {
-			@Override
-			public boolean verify(JComponent arg0) {
-				if(isEmpty(jtuser) && isEmpty(jpassword)){
-					return false;
-				} else {
-					jpassword.setEditable(true);
-				}
-				return true;
-			}
-		});
-		
-		jtuser.addKeyListener(gdek);
-				
-		jpassword.addKeyListener(new KeyAdapter() {
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					jbanmelden.requestFocus();
-				}
-			}
-		});
+		jtuser.addKeyListener(gdek);
+		jpassword.addKeyListener(gdek);
 		
 	}
 
@@ -243,8 +218,12 @@ public class GuiJPLogin extends JPanel{
 		return jpassword;
 	}
 
-	public void setJpassword(JPasswordField jpassword) {
-		this.jpassword = jpassword;
+	public JTextField getJUserTextField() {
+		return this.jtuser;
+	}
+
+	public JButton getJbanmelden() {
+		return jbanmelden;
 	}
 
 	public void felderLoeschen() {
