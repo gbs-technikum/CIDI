@@ -203,15 +203,15 @@ public class GuiJPLogin extends JPanel{
 			jtuser.setEditable(false);
 			jpassword.setEditable(false);
 			return true;
-		}
-		else
+		} else {
 			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+		}
 	return false;
 	}
 
 	private boolean sqlLogin(String user, String passwort) {
 		//-> Abfrage SQL ob Logindaten ok sind und ob nicht besetzt ist.
-		return false;
+		return true;
 	}
 
 	public JPasswordField getJpassword() {
@@ -231,5 +231,5 @@ public class GuiJPLogin extends JPanel{
 		jpassword.setText("");
 		jtuser.requestFocus();
 	}
-	
+
 }

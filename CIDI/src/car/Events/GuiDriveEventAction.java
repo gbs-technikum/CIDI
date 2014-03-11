@@ -42,7 +42,7 @@ public class GuiDriveEventAction implements ActionListener{
 		
 		String event = e.getActionCommand();
 		
-		System.out.println(event);
+//		System.out.println(event);
 //		System.out.println(e);
 		
 		switch (event) {
@@ -73,25 +73,16 @@ public class GuiDriveEventAction implements ActionListener{
 			System.out.println("Ab zum Webshop!");
 			break;
 			
-		case "Hupe schalten":
-			//Bild ändern
-			System.out.println("Hup Hup");
-			break;
-			
 		case "Fernlicht schalten":
+			System.out.println("Fernlicht schalten");
 			guiDrive.getFernlichtButton().bildSchalten();
 			break;
 			
 		case "Abblendlicht schalten":
+			System.out.println("Abblendlicht schalten");
 			guiDrive.getAbblendlichtButton().bildSchalten();
 			break;
-	
-		//Versuch
-//		case "Vorwaerts":
-//			System.out.println("-> Vorwaerts");
-//			new GuiDriveEventMouse(guiDrive.getVorwarets());
-//			break;
-//			
+		
 		default:
 			break;
 		}

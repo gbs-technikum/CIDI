@@ -5,12 +5,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
@@ -25,6 +28,7 @@ public class GuiJPDrive extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private GuiJFrameMain guiMain;
+    private int wartezeitMin=1, wartezeitSek=5;
 	
 	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
     private JButton jbVerbindungBeenden;
@@ -43,12 +47,12 @@ public class GuiJPDrive extends JPanel{
     }
 
 	private void initEvents() {
+		countDownZaehler();
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		
 		//GuiDriveEventAciton - Breich
 		cbFernlicht.getButton().addActionListener(gdea);
 		cbAbblendlicht.getButton().addActionListener(gdea);
-		cbHupe.getButton().addActionListener(gdea);
 		cbVorwaerts.getButton().addActionListener(gdea);
 		jbVerbindungBeenden.addActionListener(gdea);
 		
@@ -65,7 +69,7 @@ public class GuiJPDrive extends JPanel{
 		cbVorwaerts.getButton().addKeyListener(gdek);
 		
 		// -> Testebekommen wenn Focus drauf gesetzt ist.
-		cbVorwaerts.getButton().setMnemonic('w');
+//		cbVorwaerts.getButton().setMnemonic('w');
 		
 		
 	}
@@ -83,8 +87,6 @@ public class GuiJPDrive extends JPanel{
 		this.add(jpLinks,BorderLayout.WEST);
 	}
 	
-
-
 	private JPanel fMainPanelLinks() {
 		JPanel jplinks = new JPanel();
         jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.red,3)));
@@ -142,6 +144,32 @@ public class GuiJPDrive extends JPanel{
 		return jprechts;
 	}
 
+	private void countDownZaehler() {
+		int delay = 1000; //milliseconds
+		  ActionListener taskPerformer = new ActionListener() {
+		      public void actionPerformed(ActionEvent evt) {
+		    	  wartezeitSek--;
+		    	  if(wartezeitSek<0){
+		    		  wartezeitSek=59;
+		    		  wartezeitMin--;
+		    	  }
+		    	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
+		    	  if(wartezeitMin<10)
+		    		  wMin = "0"+wartezeitMin;
+		    	  if(wartezeitSek<10)
+		    		  wSek="0"+wartezeitSek;
+		    	  	  jlZahlenVerbZeit.setText(wMin+":"+wSek);
+		          if(wartezeitMin==0 && wartezeitSek==0){
+		        	  guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+		        	  //-> Sitzung wird Freigegeben
+		        	  //-> Prüfen ob jemand in Warteschlange ist  z.B. checkWarteschlange();
+		        	  System.out.println("-> Zeitabgelaufen! -> aufgehts");
+		          }
+		      }
+		  };
+		  new Timer(delay, taskPerformer).start();
+	}
+	
 	private JPanel fStream() {
 		JLabel jlTestBild = new JLabel(new ImageIcon("src/bilder/test.jpg"));
         JPanel jpStream = new JPanel();
@@ -238,5 +266,8 @@ public class GuiJPDrive extends JPanel{
 	public CIDIButton getVorwarets(){
 		return this.cbVorwaerts;
 	}
+	public CIDIButton getHupe(){
+		return this.cbHupe;
+	}	
 }
 

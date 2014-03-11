@@ -34,7 +34,6 @@ public class GuiJFrameMain extends JFrame{
 		initEvents();
 		this.pack();
 		this.setVisible(true);
-		
 	}
 
 	private void initComponent() {
@@ -49,7 +48,7 @@ public class GuiJFrameMain extends JFrame{
         dynamischerTeil();
         //****************
         
-//Auf Container bastln
+        //Auf Container bastln
         standardJFrameBauen();        
 	}
 
@@ -60,26 +59,25 @@ public class GuiJFrameMain extends JFrame{
 	
 //****************************************************************
 	private void dynamischerTeil() {
-		gjs = new GuiJPStart(this);
-		gjl = new GuiJPLogin(this);
-		gjd = new GuiJPDrive(this);
-		c.add(gjd, BorderLayout.CENTER);
+//		gjs = new GuiJPStart(this);
+//		gjl = new GuiJPLogin(this);
+//		gjd = new GuiJPDrive(this);
+		c.add(new GuiJPStart(this), BorderLayout.CENTER);
 	}
 //****************************************************************
 	
 	private void initEvents() {
 		gdew = new GuiDriveWindowEvent();
 		gdea = new GuiDriveEventAction(this);
-		
+
 		this.addWindowListener(gdew);
-		
-			
 	}	
 
 	//Zum schalten des JPanels zwischen den "ProgrammOberflächen"
 	public void jpNeuZeichnen(String oberFlaeche){
 		switch (oberFlaeche) {
 		case "ZurLoginOberflaeche":
+			gjl = new GuiJPLogin(this);
 			c.removeAll();
 			standardJFrameBauen();
 			c.add(gjl, BorderLayout.CENTER);
@@ -88,6 +86,7 @@ public class GuiJFrameMain extends JFrame{
 			this.pack();
 			break;
 		case "ZurDriveOberflaeche":
+			gjd = new GuiJPDrive(this);
 			c.removeAll();
 			standardJFrameBauen();
 			c.add(gjd, BorderLayout.CENTER);
@@ -96,6 +95,7 @@ public class GuiJFrameMain extends JFrame{
 			this.pack();
 			break;
 		case "ZurStartOberflaeche":
+			gjs = new GuiJPStart(this);
 			c.removeAll();
 			standardJFrameBauen();
 			c.add(gjs, BorderLayout.CENTER);

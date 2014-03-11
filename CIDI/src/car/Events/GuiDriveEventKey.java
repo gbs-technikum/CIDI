@@ -48,6 +48,18 @@ public class GuiDriveEventKey implements KeyListener {
 		case KeyEvent.VK_RIGHT:
 			System.out.println("-> Rechts");
 			break;
+		case KeyEvent.VK_W:
+			System.out.println("->Vorwärts");
+			break;
+		case KeyEvent.VK_S:
+			System.out.println("->Rückwärts");
+			break;
+		case KeyEvent.VK_A:
+			System.out.println("-> Links");
+			break;
+		case KeyEvent.VK_D:
+			System.out.println("-> Rechts");
+			break;
 		default:
 			break;
 		}

@@ -8,6 +8,7 @@ import car.Elemente.CIDIButton;
 public class GuiDriveEventMouse implements MouseListener{
 
 	private CIDIButton cb;
+	private String actionCommand;
 	
 	public GuiDriveEventMouse(CIDIButton cbExtern){
 		this.cb = cbExtern;
@@ -20,11 +21,13 @@ public class GuiDriveEventMouse implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		this.cb.bildSchalten();
+		this.cb.pinTogglen();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.cb.bildSchalten();
+		this.cb.pinTogglen();
 	}
 
 	@Override
