@@ -76,11 +76,13 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Fernlicht schalten":
 			System.out.println("Fernlicht schalten");
 			guiDrive.getFernlichtButton().bildSchalten();
+			guiMain.requestFocus();
 			break;
 			
 		case "Abblendlicht schalten":
 			System.out.println("Abblendlicht schalten");
 			guiDrive.getAbblendlichtButton().bildSchalten();
+			guiMain.requestFocus();
 			break;
 		
 		default:

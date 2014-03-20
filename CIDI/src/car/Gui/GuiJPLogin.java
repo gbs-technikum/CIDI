@@ -50,13 +50,10 @@ public class GuiJPLogin extends JPanel{
 		countDownZaehler();
 
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
-		
-		GuiDriveEventKey gdek = new GuiDriveEventKey(this);
-		
 		jbabbrechen.addActionListener(gdea);
 		jbanmelden.addActionListener(gdea);
 		
-
+		GuiDriveEventKey gdek = new GuiDriveEventKey(this);
 		jtuser.addKeyListener(gdek);
 		jpassword.addKeyListener(gdek);
 		

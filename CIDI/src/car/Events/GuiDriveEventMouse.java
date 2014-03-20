@@ -3,15 +3,17 @@ package car.Events;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import car.Elemente.CIDIButton;
+import car.Gui.GuiJFrameMain;
+import car.Hilfsklassen.CIDIButton;
 
 public class GuiDriveEventMouse implements MouseListener{
 
 	private CIDIButton cb;
-	private String actionCommand;
+	private GuiJFrameMain guiMain;
 	
-	public GuiDriveEventMouse(CIDIButton cbExtern){
+	public GuiDriveEventMouse(CIDIButton cbExtern, GuiJFrameMain guiM){
 		this.cb = cbExtern;
+		this.guiMain = guiM;
 	}
 	
 	@Override
@@ -22,12 +24,14 @@ public class GuiDriveEventMouse implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		this.cb.bildSchalten();
 		this.cb.pinTogglen();
+		this.guiMain.requestFocus();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.cb.bildSchalten();
 		this.cb.pinTogglen();
+		this.guiMain.requestFocus();
 	}
 
 	@Override

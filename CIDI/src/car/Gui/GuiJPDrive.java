@@ -17,12 +17,11 @@ import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
-import com.sun.corba.se.impl.transport.CorbaInboundConnectionCacheImpl;
-
-import car.Elemente.CIDIButton;
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveEventKey;
+import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
+import car.Hilfsklassen.CIDIButton;
 
 public class GuiJPDrive extends JPanel{
 	
@@ -57,21 +56,22 @@ public class GuiJPDrive extends JPanel{
 		jbVerbindungBeenden.addActionListener(gdea);
 		
 		//GuiDriveEventMouse - Breich		
-		cbHupe.getButton().addMouseListener(new GuiDriveEventMouse(cbHupe));
-		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts));
-		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks));
-		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts));
-		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts));
+		cbHupe.getButton().addMouseListener(new GuiDriveEventMouse(cbHupe, guiMain));
+		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts, guiMain));
+		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks, guiMain));
+		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
+		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts, guiMain));
 		
 		
 		//GuiDriveEventKey - Bereich
 		GuiDriveEventKey gdek = new GuiDriveEventKey();
 		cbVorwaerts.getButton().addKeyListener(gdek);
 		
-		// -> Testebekommen wenn Focus drauf gesetzt ist.
-//		cbVorwaerts.getButton().setMnemonic('w');
-		
-		
+		//GuiDriveEventKeySteuerung - Bereich 
+		GuiDriveEventKeySteuerung gdeks = new GuiDriveEventKeySteuerung(this);
+		guiMain.addKeyListener(gdeks);
+		guiMain.requestFocus();
+						
 	}
 
 	private void initComponents() {
@@ -266,6 +266,19 @@ public class GuiJPDrive extends JPanel{
 	public CIDIButton getVorwarets(){
 		return this.cbVorwaerts;
 	}
+	
+	public CIDIButton getLinks(){
+		return this.cbLinks;
+	}
+	
+	public CIDIButton getRueckwaerts(){
+		return this.cbRueckwaerts;
+	}
+	
+	public CIDIButton getRechts(){
+		return this.cbRechts;
+	}
+	
 	public CIDIButton getHupe(){
 		return this.cbHupe;
 	}	
