@@ -53,14 +53,15 @@ public class GuiDriveEventAction implements ActionListener{
 
 		case "Abbrechen":
 			//Felder löschen
-			System.out.println("-> Abbrechen");
+			System.out.println("abbrechen");
 			this.guiLogin.felderLoeschen();
 			break;
 		
 		case "Anmelden":
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			if(this.guiLogin.checkLogin()){
-				guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
+				this.guiLogin.checkLoginDaten();
+				//guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
 			} 			
 			break;
 			

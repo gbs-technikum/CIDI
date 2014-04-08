@@ -22,6 +22,7 @@ import javax.swing.border.LineBorder;
 
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveEventKey;
+import car.Hilfsklassen.SQL;
 
 public class GuiJPLogin extends JPanel{
 
@@ -32,16 +33,16 @@ public class GuiJPLogin extends JPanel{
     private LineBorder lbKastl;
     private int wartezeitMin, wartezeitSek;
     private JLabel jlWarteZeit;
-    boolean loginOk;
+    private SQL mysql;
 	
     private GuiJFrameMain guiMain;
     
     public GuiJPLogin(GuiJFrameMain guiMain){
 
     	this.setLayout(new BorderLayout());
-    	
 		this.guiMain = guiMain;
-    	
+		this.mysql = new SQL();
+		
     	initComponents();
     	initEvents();
     }
@@ -75,10 +76,9 @@ public class GuiJPLogin extends JPanel{
 		    	  if(wartezeitSek<10)
 		    		  wSek="0"+wartezeitSek;
 		          jlWarteZeit.setText(wMin+":"+wSek);
-		          if(wartezeitMin==0 && wartezeitSek==0 && loginOk){
-		        	  setVisible(false);
-		        	  //-> Soll ausgeloggt werden
-		        	  System.out.println("-> Login ok! -> aufgehts");
+		          if(wartezeitMin==0 && wartezeitSek==0 && checkLogin()){
+		        	  //-> vorheriger Benutzer soll ausgeloggt werden
+		        	  System.out.println("-> Login alles ok! -> aufgehts");
 		          }else if(wartezeitMin==0 && wartezeitSek==0){
 		        	  System.out.println("-> Zeitabgelaufen");
 		        	  wartezeitMin=15;
@@ -184,26 +184,41 @@ public class GuiJPLogin extends JPanel{
 	}
     
 	public boolean checkLogin() {
-		if(isEmpty((JTextField) jtuser))
+		if(isEmpty((JTextField) jtuser)) {
 			JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
-		else if(isEmpty((JTextField) jpassword))
+		} else if(isEmpty((JTextField) jpassword)) {
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
-		else if(checkLoginDaten()){
+		} else {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkLoginDaten(){
-		if(sqlLogin(jtuser.getText(), new String(jpassword.getPassword()) )){
+	public void checkLoginDaten(){
+		String status = this.mysql.pruefeLogin(jtuser.getText(), new String(jpassword.getPassword()));
+		
+		System.out.println(status);
+		
+		switch (status) {
+		case "Logindaten korrekt | Sitzung wird belegt": {
 			jbanmelden.setEnabled(false);
 			jtuser.setEditable(false);
 			jpassword.setEditable(false);
-			return true;
-		} else {
+			this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
+			break;
+			}
+		case "Logindaten korrekt | Sitzung belegt":{
+			System.out.println("Bitte warten bis Sitzung freigegeben ist!");
+			jbanmelden.setEnabled(false);
+			jtuser.setEditable(false);
+			jpassword.setEditable(false);
+			break;
+			}
+		case "Logindaten falsch":{
 			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+			break;
+			}
 		}
-	return false;
 	}
 
 	private boolean sqlLogin(String user, String passwort) {
@@ -225,8 +240,11 @@ public class GuiJPLogin extends JPanel{
 
 	public void felderLoeschen() {
 		jtuser.setText("");
+		jtuser.setEnabled(true);
 		jpassword.setText("");
+		jpassword.setEnabled(true);
 		jtuser.requestFocus();
+		jtuser.setEnabled(true);
 	}
 
 }
