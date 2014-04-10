@@ -48,7 +48,7 @@ public class GuiJPLogin extends JPanel{
     }
 
 	private void initEvents() {
-		countDownZaehler();
+//		countDownZaehler();
 
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		jbabbrechen.addActionListener(gdea);
@@ -64,36 +64,33 @@ public class GuiJPLogin extends JPanel{
 		int delay = 1000; //milliseconds
 		  ActionListener taskPerformer = new ActionListener() {
 		      public void actionPerformed(ActionEvent evt) {
-		    	  
 		    	  wartezeitSek--;
 		    	  if(wartezeitSek<0){
 		    		  wartezeitSek=59;
 		    		  wartezeitMin--;
 		    	  }
 		    	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
-		    	  if(wartezeitMin<10)
+		    	  if(wartezeitMin<10){
 		    		  wMin = "0"+wartezeitMin;
-		    	  if(wartezeitSek<10)
+		    	  }
+		    	  if(wartezeitSek<10){
 		    		  wSek="0"+wartezeitSek;
+		    	  }
 		          jlWarteZeit.setText(wMin+":"+wSek);
 		          if(wartezeitMin==0 && wartezeitSek==0 && checkLogin()){
 		        	  //-> vorheriger Benutzer soll ausgeloggt werden
 		        	  System.out.println("-> Login alles ok! -> aufgehts");
-		          }else if(wartezeitMin==0 && wartezeitSek==0){
-		        	  System.out.println("-> Zeitabgelaufen");
-		        	  wartezeitMin=15;
-		        	  wartezeitSek=00;
-		          }
+//		        	  guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
+		          } else {
+		        	  System.out.println("-> Bitte warten bis Zeit abgelaufen ist");
+				}
+		          
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
 	}
 
 	private void initComponents() {
-	
-		//Hole Zeit von SQL-Datenbank
-		getTimesql();
-		
 		//Design 
 		lbKastl = new LineBorder(Color.gray,3);
 
@@ -104,6 +101,9 @@ public class GuiJPLogin extends JPanel{
 		//This - Panel Zambauen
         this.add(jpleft,BorderLayout.WEST);
         this.add(jprigth,BorderLayout.EAST);
+        
+		//Hole Zeit von SQL-Datenbank
+		getTimesql();
 	}
 
 	private JPanel fjpRechts() {
@@ -172,9 +172,18 @@ public class GuiJPLogin extends JPanel{
 	}
     
     private void getTimesql() {
-    	wartezeitMin=0;
-    	wartezeitSek=5;
-		
+    	System.out.println("inlogin");
+    	int sek = 6666;
+		sek = mysql.getTime();
+    	System.out.println("loginsek:" + sek);
+    	if(sek != 6666){
+        	wartezeitSek=sek % 60;
+        	wartezeitMin=(sek-(sek%60))/60; 
+        	this.countDownZaehler();
+    	} else {
+    		System.out.println("uhr halt");
+    		this.jlWarteZeit.setText("Sitzung frei!");
+    	}
 	}
 	
     private boolean isEmpty(JTextField input) {
@@ -189,12 +198,13 @@ public class GuiJPLogin extends JPanel{
 		} else if(isEmpty((JTextField) jpassword)) {
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
+			if(checkLoginDaten());
 			return true;
 		}
 		return false;
 	}
 
-	public void checkLoginDaten(){
+	public boolean checkLoginDaten(){
 		String status = this.mysql.pruefeLogin(jtuser.getText(), new String(jpassword.getPassword()));
 		
 		System.out.println(status);
@@ -205,9 +215,9 @@ public class GuiJPLogin extends JPanel{
 			jtuser.setEditable(false);
 			jpassword.setEditable(false);
 			this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
-			break;
+			return true;
 			}
-		case "Logindaten korrekt | Sitzung belegt":{
+		case "Logindaten korrekt | Sitzung ist belegt":{
 			System.out.println("Bitte warten bis Sitzung freigegeben ist!");
 			jbanmelden.setEnabled(false);
 			jtuser.setEditable(false);
@@ -216,14 +226,10 @@ public class GuiJPLogin extends JPanel{
 			}
 		case "Logindaten falsch":{
 			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
-			break;
+			return false;
 			}
 		}
-	}
-
-	private boolean sqlLogin(String user, String passwort) {
-		//-> Abfrage SQL ob Logindaten ok sind und ob nicht besetzt ist.
-		return true;
+		return false;
 	}
 
 	public JPasswordField getJpassword() {

@@ -16,12 +16,14 @@ import java.awt.event.ActionListener;
 import car.Gui.GuiJFrameMain;
 import car.Gui.GuiJPDrive;
 import car.Gui.GuiJPLogin;
+import car.Hilfsklassen.SQL;
 
 public class GuiDriveEventAction implements ActionListener{
 	
 	private GuiJFrameMain guiMain;
 	private GuiJPLogin guiLogin;
 	private GuiJPDrive guiDrive;
+	private SQL mysql;
 	
 	public GuiDriveEventAction(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
@@ -93,11 +95,13 @@ public class GuiDriveEventAction implements ActionListener{
 	}
 
 	private void logout() {
-		// sitzung Infos in Datenbank speichern!
-		// Stream etc beenden
-		// Sitzung für nächsten Freimachen!"
-		System.out.println("logout");
-		guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+		this.mysql = new SQL();
+		if(mysql.logout()){
+			// Stream etc beenden
+			guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+		} else {
+			System.out.println("FEHLER -> Logout nicht möglich gdea methode logout");
+		}
 		
 	}
 

@@ -22,12 +22,14 @@ import car.Events.GuiDriveEventKey;
 import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
+import car.Hilfsklassen.SQL;
 
 public class GuiJPDrive extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private GuiJFrameMain guiMain;
-    private int wartezeitMin=1, wartezeitSek=5;
+    private int wartezeitMin, wartezeitSek;
+    private SQL mysql;
 	
 	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
     private JButton jbVerbindungBeenden;
@@ -40,13 +42,15 @@ public class GuiJPDrive extends JPanel{
     	this.setLayout(new BorderLayout());
     	
 		this.guiMain = guiMain;
-    	
+		this.mysql = new SQL();
+		this.zeitSetzen();
+		countDownZaehler();
+		
     	initComponents();
     	initEvents();
     }
 
 	private void initEvents() {
-		countDownZaehler();
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		
 		//GuiDriveEventAciton - Breich
@@ -154,16 +158,22 @@ public class GuiJPDrive extends JPanel{
 		    		  wartezeitMin--;
 		    	  }
 		    	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
-		    	  if(wartezeitMin<10)
+		    	  if(wartezeitMin<10){
 		    		  wMin = "0"+wartezeitMin;
-		    	  if(wartezeitSek<10)
+		    	  }
+		    	  if(wartezeitSek<10){
 		    		  wSek="0"+wartezeitSek;
 		    	  	  jlZahlenVerbZeit.setText(wMin+":"+wSek);
+		    	  }
 		          if(wartezeitMin==0 && wartezeitSek==0){
-		        	  guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
-		        	  //-> Sitzung wird Freigegeben
+		        	  if(true){ //Abfrage ob jeamnd in warteschlange sitzt
+		        		  mysql.logout();
+		        		  guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+		        	  } else {
+		        		  wartezeitMin = 12;
+		        		  wartezeitSek = 20;
+		        	  }
 		        	  //-> Prüfen ob jemand in Warteschlange ist  z.B. checkWarteschlange();
-		        	  System.out.println("-> Zeitabgelaufen! -> aufgehts");
 		          }
 		      }
 		  };
@@ -253,6 +263,19 @@ public class GuiJPDrive extends JPanel{
 	    iiHupeArray = new ImageIcon[2];
 	    iiHupeArray[0] = new ImageIcon("src/buttons/hupe_inaktiv.png");
 	    iiHupeArray[1] = new ImageIcon("src/buttons/hupe_aktiv.png");
+	}
+	
+	private void zeitSetzen(){
+    	System.out.println("indrive");
+		int sek = mysql.getTime();
+    	if(sek != 6666){
+        	wartezeitSek=sek % 60;
+        	wartezeitMin=(sek-(sek%60))/60; 
+    	} else {
+    		System.out.println("-> Logischer Fehler ... GuiJPDrive zeitSetzen");
+    		wartezeitSek = 00;
+    		wartezeitMin = 00;
+    	}
 	}
 	
 	public CIDIButton getFernlichtButton(){
