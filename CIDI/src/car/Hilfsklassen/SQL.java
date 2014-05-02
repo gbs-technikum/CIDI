@@ -12,7 +12,7 @@ public class SQL {
 	private Connection connection = null;
 	private String sqlBefehl = "";
 	private String datenbankpfad, user, passwort;
-	private String temp;
+	private String id;
 
 	public SQL() {
 		datenbankpfad = "jdbc:mysql://localhost:3306/cidi";
@@ -25,10 +25,9 @@ public class SQL {
 	private void verbindungAufbauen() {
 		// Verbindung DB cidi
 		try {
-			connection = DriverManager.getConnection(datenbankpfad, user,
-					passwort);
+			connection = DriverManager.getConnection(datenbankpfad, user,passwort);
+			pst = connection.prepareStatement("SELECT id FROM Benutzer WHERE nutzername=? AND passwort=?");
 		} catch (SQLException e) {
-			e.printStackTrace();
 			System.out.println("-> Zonk keine Verbindung DB");
 		}
 	}
@@ -40,31 +39,31 @@ public class SQL {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else {
+			System.out.println("Problem Verbindungsabbau");
 		}
 	}
 
 	public boolean pruefeLogin(String nutzerName, String pw) {
 		try {
 			// Abfrage
-			pst = connection
-					.prepareStatement("SELECT id FROM Benutzer WHERE nutzername=? AND passwort=?");
+			
 			pst.setString(1, nutzerName);
 			pst.setString(2, pw);
 			rst = pst.executeQuery();
 
 			if (rst.next()) {
-				temp = rst.getString(1);
-				if (login(temp)) { // Übergeben der ID des Nutzers
+				id = rst.getString(1);
+				if (login(id)) { // Übergeben der ID des Nutzers
 					System.out.println("Sitzung frei");
 				} else {
-					System.out.println("Sitzung belegt");
+					System.out.println("Sitzung belegt -> warteSchlange");
 				}
 				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			System.out.println("finally");
 			if (rst != null) {
 				try {
 					rst.close();
@@ -86,29 +85,37 @@ public class SQL {
 	private boolean login(String nutzerID) {
 		try {
 			// Prüfen ob irgendwo ein true gesetzt ist
+			rst=null;
 			pst = connection.prepareStatement("SELECT id FROM benutzer WHERE useFlag=true");
-			rst = pst.executeQuery();
-			pst.executeUpdate("INSERT INTO sitzung (id_benutzer, warteSchlange) VALUES ("+ nutzerID + ", NOW() )");
-			if (rst != null) {
-				System.out.println(rst);
-				System.out.println(rst.next());
+			rst = pst.executeQuery();	
+			System.out.println(rst.next());
+			if ( rst.next() ) {
+				System.out.println("Es Fährt jemand, ab in die Warteschlange");
+				pst.executeUpdate("INSERT INTO sitzung (id_benutzer, warteSchlange) VALUES ("+ nutzerID + ", NOW() )");
+				return true;
 			}
+			
 			if ( !(rst.next()) ) { // Abfrage ob rst ein Element beinhaltet
 				System.out.println("in if loginMethode");
 				// useFlag frei ... daher in SQL-Benutzer dieses setzen
-				sqlBefehl = "UPDATE benutzer SET useFlag=true WHERE id="
-						+ nutzerID;
+				sqlBefehl = "UPDATE benutzer SET useFlag=true WHERE id=" + nutzerID;
 				pst.executeUpdate(sqlBefehl); // Abfrage absetzen
-				// Eintrag in SQL-Sitzugn
-				sqlBefehl = "UPDATE sitzung SET beginnSitzung=NOW() WHERE id_benutzer="	+ nutzerID + " AND beginnSitzung='0000-00-00 00:00:00')";
+				// Eintrag in SQL-Sitzugn ohne warteSchlange
+				sqlBefehl = "INSERT INTO Sitzung (id_benutzer, beginnSitzung) VALUES (" + nutzerID + ", NOW()";
+				//sqlBefehl = "UPDATE sitzung SET beginnSitzung=NOW() WHERE id_benutzer="	+ nutzerID + " AND beginnSitzung='0000-00-00 00:00:00')";
 				pst.executeUpdate(sqlBefehl); // Abfrage absetzen
 				return true;
-			} else {
-				return false;
-			}
+			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			if (pst != null){
+				try {
+					pst.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			if (rst != null) {
 				try {
 					rst.close();
@@ -200,15 +207,8 @@ public class SQL {
 
 	public static void main(String[] args) {
 		SQL s = new SQL();
-		// System.out.println(s.getTime()/60.0);
-		System.out.println(s.pruefeLogin("becker", "becker"));
 
-		// Scanner sc = new Scanner(System.in);
-		// String text = sc.nextLine();
-		// System.out.println("2");
-		// s.logout();
-		// System.out.println("3");
-		s.verbindungAbbauen();
-		// System.out.println(543%60);
+		s.login("2");
+		
 	}
 }
