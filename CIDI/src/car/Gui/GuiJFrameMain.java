@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import car.Events.GuiDriveEventAction;
-import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveWindowEvent;
 
 public class GuiJFrameMain extends JFrame{
@@ -119,7 +118,7 @@ public class GuiJFrameMain extends JFrame{
 	
 	private JPanel fcontainerSouth() {
 		JPanel jpSouth = new JPanel(new BorderLayout());
-        JLabel jlCopyRight = new JLabel("© all rights reserved for the best Class - I4a!");
+        JLabel jlCopyRight = new JLabel("© all rights reserved for almost the best Class - I4a!");
         jpSouth.add(jlCopyRight,BorderLayout.WEST);
 		return jpSouth;
 	}

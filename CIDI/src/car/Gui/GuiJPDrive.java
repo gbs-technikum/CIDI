@@ -22,14 +22,13 @@ import car.Events.GuiDriveEventKey;
 import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
-import car.Hilfsklassen.SQL;
 
 public class GuiJPDrive extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private GuiJFrameMain guiMain;
     private int wartezeitMin, wartezeitSek;
-    private SQL mysql;
+//    private SQL mysql;
 	
 	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
     private JButton jbVerbindungBeenden;
@@ -42,7 +41,7 @@ public class GuiJPDrive extends JPanel{
     	this.setLayout(new BorderLayout());
     	
 		this.guiMain = guiMain;
-		this.mysql = new SQL();
+//		this.mysql = new SQL();
 		this.zeitSetzen();
 		countDownZaehler();
 		
@@ -167,7 +166,7 @@ public class GuiJPDrive extends JPanel{
 		    	  }
 		          if(wartezeitMin==0 && wartezeitSek==0){
 		        	  if(true){ //Abfrage ob jeamnd in warteschlange sitzt
-		        		  mysql.logout();
+//		        		  mysql.logout();
 		        		  guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
 		        	  } else {
 		        		  wartezeitMin = 12;
@@ -266,8 +265,8 @@ public class GuiJPDrive extends JPanel{
 	}
 	
 	private void zeitSetzen(){
-    	System.out.println("indrive");
-		int sek = mysql.getTime();
+//		int sek = 20; //mysql.getTime();
+    	int sek = 325;
     	if(sek != 6666){
         	wartezeitSek=sek % 60;
         	wartezeitMin=(sek-(sek%60))/60; 

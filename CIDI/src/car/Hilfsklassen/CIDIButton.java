@@ -7,24 +7,34 @@ public class CIDIButton {
 
 	private JButton jbButton;
 	private ImageIcon[] iiBilder;
-	private Boolean stauts;
+	private Boolean status;
 	private Boolean pinStatus;
 
 	public CIDIButton(ImageIcon[] buttonBilder, String actionCommand){
 		this.iiBilder = buttonBilder;
 		this.jbButton = new JButton(buttonBilder[0]);
 		this.jbButton.setActionCommand(actionCommand);
-		this.stauts = false;
+		this.status = false;
 		this.pinStatus=false;
 	}
 	
-	public void bildSchalten(){
-		if(this.stauts){
-			this.jbButton.setIcon(this.iiBilder[0]);
-			this.stauts = false;
-		} else if(!(this.stauts)){
+	public void bildSchaltenAn(){
+		this.jbButton.setIcon(this.iiBilder[1]);
+	}
+	
+	public void bildSchaltenAus(){
+		this.jbButton.setIcon(this.iiBilder[0]);
+	}
+	
+	public void bildToggln(){
+		if(this.status == false){
 			this.jbButton.setIcon(this.iiBilder[1]);
-			this.stauts = true;			
+			this.status = true;
+		}
+		
+		if(this.status == true){
+			this.jbButton.setIcon(this.iiBilder[0]);
+			this.status = false;
 		}
 	}
 	
