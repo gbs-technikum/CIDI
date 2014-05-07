@@ -16,14 +16,14 @@ import java.awt.event.ActionListener;
 import car.Gui.GuiJFrameMain;
 import car.Gui.GuiJPDrive;
 import car.Gui.GuiJPLogin;
-import car.Hilfsklassen.SQL;
+import car.Hilfsklassen.DAO;
 
 public class GuiDriveEventAction implements ActionListener{
 	
 	private GuiJFrameMain guiMain;
 	private GuiJPLogin guiLogin;
 	private GuiJPDrive guiDrive;
-	private SQL mysql;
+	private DAO datenbank;
 	
 	public GuiDriveEventAction(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
@@ -50,13 +50,14 @@ public class GuiDriveEventAction implements ActionListener{
 		switch (event) {
 		case "ZumLogin":
 			System.out.println("-> Zum Login");
-			guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+			guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
 			break;
 
 		case "Abbrechen":
-			//Felder löschen
+			//Felder löschen //dabenbank angelegtes zeuch löschen
 			System.out.println("abbrechen");
 			this.guiLogin.felderLoeschen();
+			this.guiLogin.getDatenbank().wartenAbbrechen();
 			break;
 		
 		case "Anmelden":
@@ -76,7 +77,7 @@ public class GuiDriveEventAction implements ActionListener{
 			System.out.println("Ab zum Webshop!");
 			break;
 			
-		case "Fernlicht schalten":
+/*		case "Fernlicht schalten":
 			System.out.println("Fernlicht schalten");
 			guiDrive.getFernlichtButton().bildSchalten();
 			guiMain.requestFocus();
@@ -86,7 +87,7 @@ public class GuiDriveEventAction implements ActionListener{
 			System.out.println("Abblendlicht schalten");
 			guiDrive.getAbblendlichtButton().bildSchalten();
 			guiMain.requestFocus();
-			break;
+			break;   */
 		
 		default:
 			break;
@@ -95,13 +96,9 @@ public class GuiDriveEventAction implements ActionListener{
 	}
 
 	private void logout() {
-		this.mysql = new SQL();
-		if(mysql.logout()){
-			// Stream etc beenden
-			guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
-		} else {
-			System.out.println("FEHLER -> Logout nicht möglich gdea methode logout");
-		}
+		this.guiDrive.getDatenbank().abmelden();
+		// Stream etc beenden
+		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
 		
 	}
 

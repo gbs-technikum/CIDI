@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveWindowEvent;
+import car.Hilfsklassen.DAO;
 
 public class GuiJFrameMain extends JFrame{
 
@@ -62,7 +63,7 @@ public class GuiJFrameMain extends JFrame{
 //		gjs = new GuiJPStart(this);
 //		gjl = new GuiJPLogin(this);
 //		gjd = new GuiJPDrive(this);
-		c.add(new GuiJPDrive(this), BorderLayout.CENTER);
+		c.add(new GuiJPLogin(this), BorderLayout.CENTER);
 	}
 //****************************************************************
 	
@@ -74,7 +75,7 @@ public class GuiJFrameMain extends JFrame{
 	}	
 
 	//Zum schalten des JPanels zwischen den "ProgrammOberflächen"
-	public void jpNeuZeichnen(String oberFlaeche){
+	public void jpNeuZeichnen(String oberFlaeche, DAO db){
 		switch (oberFlaeche) {
 		case "ZurLoginOberflaeche":
 			gjl = new GuiJPLogin(this);
@@ -86,7 +87,7 @@ public class GuiJFrameMain extends JFrame{
 			this.pack();
 			break;
 		case "ZurDriveOberflaeche":
-			gjd = new GuiJPDrive(this);
+			gjd = new GuiJPDrive(this, db);
 			c.removeAll();
 			standardJFrameBauen();
 			c.add(gjd, BorderLayout.CENTER);

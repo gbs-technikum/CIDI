@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
@@ -22,7 +24,7 @@ import javax.swing.border.LineBorder;
 
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveEventKey;
-import car.Hilfsklassen.SQL;
+import car.Hilfsklassen.DAO;
 
 public class GuiJPLogin extends JPanel{
 
@@ -33,7 +35,7 @@ public class GuiJPLogin extends JPanel{
     private LineBorder lbKastl;
     private int wartezeitMin, wartezeitSek;
     private JLabel jlWarteZeit;
-    private SQL mysql;
+    private DAO datenbank;
 	
     private GuiJFrameMain guiMain;
     
@@ -41,7 +43,9 @@ public class GuiJPLogin extends JPanel{
 
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
-		this.mysql = new SQL();
+		this.datenbank = new DAO();
+		
+		setMaxWarteZeit();
 		
     	initComponents();
     	initEvents();
@@ -61,7 +65,8 @@ public class GuiJPLogin extends JPanel{
 	}
 
 	private void countDownZaehler() {
-		int delay = 1000; //milliseconds
+		int delay = 1000; //milliseconds  (zieht millisekunden)
+		
 		  ActionListener taskPerformer = new ActionListener() {
 		      public void actionPerformed(ActionEvent evt) {
 		    	  wartezeitSek--;
@@ -78,13 +83,9 @@ public class GuiJPLogin extends JPanel{
 		    	  }
 		          jlWarteZeit.setText(wMin+":"+wSek);
 		          if(wartezeitMin==0 && wartezeitSek==0 && checkLogin()){
-		        	  //-> vorheriger Benutzer soll ausgeloggt werden
-		        	  System.out.println("-> Login alles ok! -> aufgehts");
-//		        	  guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
 		          } else {
 		        	  System.out.println("-> Bitte warten bis Zeit abgelaufen ist");
 				}
-		          
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
@@ -174,7 +175,6 @@ public class GuiJPLogin extends JPanel{
     private void getTimesql() {
     	System.out.println("inlogin");
     	int sek = 6666;
-		sek = mysql.getTime();
     	System.out.println("loginsek:" + sek);
     	if(sek != 6666){
         	wartezeitSek=sek % 60;
@@ -205,30 +205,25 @@ public class GuiJPLogin extends JPanel{
 	}
 
 	public boolean checkLoginDaten(){
-		String status = this.mysql.pruefeLogin(jtuser.getText(), new String(jpassword.getPassword()));
+		String tempPW = new String(this.jpassword.getPassword()); //zwischenspeichern für mehtode anmelden(String user, String pw)
 		
-		System.out.println(status);
-		
-		switch (status) {
-		case "Logindaten korrekt | Sitzung wird belegt": {
-			jbanmelden.setEnabled(false);
-			jtuser.setEditable(false);
-			jpassword.setEditable(false);
-			this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
-			return true;
+		try {
+			if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
+				this.guiMain.jpNeuZeichnen("zuDriveOberflaeche", this.datenbank);
+				jbanmelden.setEnabled(false);
+				jtuser.setEditable(false);
+				jpassword.setEditable(false);
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+				return false;
 			}
-		case "Logindaten korrekt | Sitzung ist belegt":{
-			System.out.println("Bitte warten bis Sitzung freigegeben ist!");
-			jbanmelden.setEnabled(false);
-			jtuser.setEditable(false);
-			jpassword.setEditable(false);
-			break;
-			}
-		case "Logindaten falsch":{
-			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
-			return false;
-			}
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		System.out.println("-> false | In checkLoginDaten() ganz unten beim letzen return");
 		return false;
 	}
 
@@ -253,4 +248,16 @@ public class GuiJPLogin extends JPanel{
 		jtuser.setEnabled(true);
 	}
 
+	public DAO getDatenbank() {
+		return this.datenbank;
+	}
+
+	private void setMaxWarteZeit() {
+		int i = datenbank.maxWarteZeitsek();
+		
+		this.wartezeitSek = i%60;
+		this.wartezeitMin = i/60;
+		
+	}
+	
 }

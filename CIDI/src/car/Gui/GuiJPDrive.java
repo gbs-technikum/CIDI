@@ -22,6 +22,7 @@ import car.Events.GuiDriveEventKey;
 import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
+import car.Hilfsklassen.DAO;
 
 public class GuiJPDrive extends JPanel{
 	
@@ -33,19 +34,19 @@ public class GuiJPDrive extends JPanel{
 	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
     private JButton jbVerbindungBeenden;
     private JLabel jlZahlenVerbZeit;
+    private DAO datenbank;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray, iiHupeArray;
 	
-    public GuiJPDrive(GuiJFrameMain guiMain){
+    public GuiJPDrive(GuiJFrameMain guiMain, DAO db){
     	this.setLayout(new BorderLayout());
-    	
 		this.guiMain = guiMain;
-//		this.mysql = new SQL();
+		this.datenbank = db;
 		this.zeitSetzen();
-		countDownZaehler();
 		
-    	initComponents();
+		countDownZaehler();
+		initComponents();
     	initEvents();
     }
 
@@ -68,7 +69,7 @@ public class GuiJPDrive extends JPanel{
 		
 		//GuiDriveEventKey - Bereich
 		GuiDriveEventKey gdek = new GuiDriveEventKey();
-		cbVorwaerts.getButton().addKeyListener(gdek);
+//		cbVorwaerts.getButton().addKeyListener(gdek);
 		
 		//GuiDriveEventKeySteuerung - Bereich 
 		GuiDriveEventKeySteuerung gdeks = new GuiDriveEventKeySteuerung(this);
@@ -167,7 +168,7 @@ public class GuiJPDrive extends JPanel{
 		          if(wartezeitMin==0 && wartezeitSek==0){
 		        	  if(true){ //Abfrage ob jeamnd in warteschlange sitzt
 //		        		  mysql.logout();
-		        		  guiMain.jpNeuZeichnen("ZurLoginOberflaeche");
+		        		  guiMain.jpNeuZeichnen("ZurLoginOberflaeche", datenbank);
 		        	  } else {
 		        		  wartezeitMin = 12;
 		        		  wartezeitSek = 20;
@@ -303,6 +304,10 @@ public class GuiJPDrive extends JPanel{
 	
 	public CIDIButton getHupe(){
 		return this.cbHupe;
+	}
+
+	public DAO getDatenbank() {
+		return this.datenbank;
 	}	
 }
 

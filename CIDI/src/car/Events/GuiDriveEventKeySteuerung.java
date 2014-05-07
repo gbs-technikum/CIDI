@@ -17,25 +17,25 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_UP:
-				this.guiDrive.getVorwarets().bildSchalten(); //Vorwärtsknopschalten
+				this.guiDrive.getVorwarets().bildSchaltenAn(); //Vorwärtsknopschalten
 				break;
 			case KeyEvent.VK_DOWN:
-				this.guiDrive.getRueckwaerts().bildSchalten();
+				this.guiDrive.getRueckwaerts().bildSchaltenAn();
 				break;
 			case KeyEvent.VK_LEFT:
-				this.guiDrive.getLinks().bildSchalten();
+				this.guiDrive.getLinks().bildSchaltenAn();
 				break;
 			case KeyEvent.VK_RIGHT:
-				this.guiDrive.getRechts().bildSchalten();
+				this.guiDrive.getRechts().bildSchaltenAn();
 				break;
 			case KeyEvent.VK_H:
-				this.guiDrive.getHupe().bildSchalten();   //Hupe an
+				this.guiDrive.getHupe().bildSchaltenAn();   //Hupe an
 				break;
 			case KeyEvent.VK_F:
-				this.guiDrive.getFernlichtButton().bildSchalten();  //Fernlicht an/aus
+				this.guiDrive.getFernlichtButton().bildToggln();  //Fernlicht an/aus
 				break;
 			case KeyEvent.VK_A:
-				this.guiDrive.getAbblendlichtButton().bildSchalten();  //Abblendlicht an/aus
+				this.guiDrive.getAbblendlichtButton().bildToggln();  //Abblendlicht an/aus
 				break;
 		}
 	}
@@ -44,19 +44,19 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_UP:
-				this.guiDrive.getVorwarets().bildSchalten(); //Vorwärtsknop schalten
+				this.guiDrive.getVorwarets().bildSchaltenAus(); //Vorwärtsknop schalten
 				break;
 			case KeyEvent.VK_DOWN:
-				this.guiDrive.getRueckwaerts().bildSchalten();
+				this.guiDrive.getRueckwaerts().bildSchaltenAus();
 				break;
 			case KeyEvent.VK_LEFT:
-				this.guiDrive.getLinks().bildSchalten();
+				this.guiDrive.getLinks().bildSchaltenAus();
 				break;
 			case KeyEvent.VK_RIGHT:
-				this.guiDrive.getRechts().bildSchalten();
+				this.guiDrive.getRechts().bildSchaltenAus();
 				break;
 			case KeyEvent.VK_H:
-				this.guiDrive.getHupe().bildSchalten();  //Hupe aus
+				this.guiDrive.getHupe().bildSchaltenAus();  //Hupe aus
 				break;
 			case KeyEvent.VK_F:
 //				this.guiDrive.getFernlichtButton().bildSchalten();  //Fernlicht aus
