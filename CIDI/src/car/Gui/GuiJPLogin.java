@@ -67,9 +67,10 @@ public class GuiJPLogin extends JPanel{
 		
 		  ActionListener taskPerformer = new ActionListener() {
 		      public void actionPerformed(ActionEvent evt) {
-//		    	  System.out.println(wartezeitMin + " " + wartezeitSek);
+		    	  System.out.println(wartezeitMin + " " + wartezeitSek);
 		          
 		          if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
+		        	  System.out.println("Zum prüfen der logindaten");
 		        	  if(checkLogin()){
 		        		  System.out.println("in ZeitMethode");
 		        		  goToDrive();
@@ -101,18 +102,6 @@ public class GuiJPLogin extends JPanel{
 		  new Timer(delay, taskPerformer).start();
 	}
 
-    private void getTimesql() {
-    	System.out.println("getTimeSQL");
-    	int i = datenbank.getMaxWarteZeitsek();
-    	if(i != -1){    	
-    		this.wartezeitSek = i%60;
-    		this.wartezeitMin = i/60;
-    	} else {
-    		this.jlWarteZeit.setText("Sitzung ist frei!");
-    		this.wartezeitMin = -666;
-    	}
-	}
-	
 	private void initComponents() {
 		//Design 
 		lbKastl = new LineBorder(Color.gray,3);
@@ -129,6 +118,19 @@ public class GuiJPLogin extends JPanel{
 		startTimer();
 	}
 
+    private void getTimesql() {
+    	System.out.println("getTimeSQL");
+    	int i = datenbank.getMaxWarteZeitsek();
+    	
+    	if(i != -1){    	
+    		this.wartezeitSek = i%60;
+    		this.wartezeitMin = i/60;
+    	} else {
+    		this.jlWarteZeit.setText("Sitzung ist frei!");
+    		this.wartezeitMin = -666;
+    	}
+	}
+	
 	private void startTimer() {
     	int i = datenbank.getMaxWarteZeitsek();
     	System.out.println("in startTimer");
@@ -141,6 +143,7 @@ public class GuiJPLogin extends JPanel{
     	} else {
     		this.jlWarteZeit.setText("Sitzung ist frei!");
     		this.wartezeitMin = -666;
+    		System.out.println("sitzung frei -> start Timer");
     	}
 	}
 
@@ -211,6 +214,7 @@ public class GuiJPLogin extends JPanel{
   
     public void goToDrive() {
 		felderLoeschen();
+		System.out.println("go to Drive");
 		this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche", this.datenbank);
 	}
 
@@ -227,6 +231,7 @@ public class GuiJPLogin extends JPanel{
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
 			if(checkLoginDaten()){
+				System.out.println("Zeile 232 -> checklogin");
 				//logindaten korrekt -> entweder in Schlange anstellen oder sofort dran
 				return true;
 			}
