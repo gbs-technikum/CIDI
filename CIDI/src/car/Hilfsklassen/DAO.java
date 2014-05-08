@@ -136,6 +136,8 @@ public class DAO {
 
 			//	Sitzung wird frei... chekcen wer in Warteschlange als nächstes kommt und dann gleich buchen !!! -> Ab de lutzi!			
 			bucheNaechsten(idSitzung);
+			this.idNutzer = -1;
+			this.idSitzung = -1;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
