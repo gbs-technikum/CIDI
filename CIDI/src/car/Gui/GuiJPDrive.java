@@ -29,38 +29,40 @@ public class GuiJPDrive extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private GuiJFrameMain guiMain;
     private int wartezeitMin, wartezeitSek;
-//    private SQL mysql;
 	
-	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbHupe, cbAbblendlicht, cbFernlicht; 
+	private CIDIButton cbVorwaerts, cbRueckwaerts, cbRechts, cbLinks, cbAbblendlicht, cbFernlicht; 
     private JButton jbVerbindungBeenden;
-    private JLabel jlZahlenVerbZeit;
+    private JLabel jlZahlenVerbZeit, jlNutzerName;
     private DAO datenbank;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
-    private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray, iiHupeArray;
+    private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
 	
     public GuiJPDrive(GuiJFrameMain guiMain, DAO db){
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
 		this.datenbank = db;
-		this.zeitSetzen();
 		
-		countDownZaehler();
 		initComponents();
     	initEvents();
     }
 
 	private void initEvents() {
+		
+		countDownZaehler();
+		
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		
 		//GuiDriveEventAciton - Breich
 		cbFernlicht.getButton().addActionListener(gdea);
 		cbAbblendlicht.getButton().addActionListener(gdea);
 		cbVorwaerts.getButton().addActionListener(gdea);
+		cbLinks.getButton().addActionListener(gdea);
+		cbRueckwaerts.getButton().addActionListener(gdea);
+		cbRueckwaerts.getButton().addActionListener(gdea);
 		jbVerbindungBeenden.addActionListener(gdea);
 		
 		//GuiDriveEventMouse - Breich		
-		cbHupe.getButton().addMouseListener(new GuiDriveEventMouse(cbHupe, guiMain));
 		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts, guiMain));
 		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks, guiMain));
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
@@ -68,7 +70,7 @@ public class GuiJPDrive extends JPanel{
 		
 		
 		//GuiDriveEventKey - Bereich
-		GuiDriveEventKey gdek = new GuiDriveEventKey();
+//		GuiDriveEventKey gdek = new GuiDriveEventKey();
 //		cbVorwaerts.getButton().addKeyListener(gdek);
 		
 		//GuiDriveEventKeySteuerung - Bereich 
@@ -131,9 +133,9 @@ public class GuiJPDrive extends JPanel{
         jpZahlenVerbZeit.add(jlZahlenVerbZeit);
         
         JPanel jpNutzerName = new JPanel();
-        JLabel jlNutzername = new JLabel("Hans Meier");  // -> Nutzername vom Login soll übergeben werden
-        jlNutzername.setFont(new Font("Arial", Font.PLAIN, 25));
-        jpNutzerName.add(jlNutzername);
+        setjlNutzername();
+        jpNutzerName.add(this.jlNutzerName);
+        
         
         jpSitzungsInfo.add(jpTextVerbZeit);
         jpSitzungsInfo.add(jpZahlenVerbZeit);
@@ -148,7 +150,15 @@ public class GuiJPDrive extends JPanel{
 		return jprechts;
 	}
 
+	private void setjlNutzername() {
+        this.jlNutzerName = new JLabel(datenbank.getNutzername());  // -> Nutzername vom Login soll übergeben werden
+		jlNutzerName.setFont(new Font("Arial", Font.PLAIN, 40));
+	}
+
 	private void countDownZaehler() {
+		this.zeitSetzen();
+		System.out.println("in Countdown");
+		
 		int delay = 1000; //milliseconds
 		  ActionListener taskPerformer = new ActionListener() {
 		      public void actionPerformed(ActionEvent evt) {
@@ -163,21 +173,28 @@ public class GuiJPDrive extends JPanel{
 		    	  }
 		    	  if(wartezeitSek<10){
 		    		  wSek="0"+wartezeitSek;
-		    	  	  jlZahlenVerbZeit.setText(wMin+":"+wSek);
 		    	  }
-		          if(wartezeitMin==0 && wartezeitSek==0){
-		        	  if(true){ //Abfrage ob jeamnd in warteschlange sitzt
-//		        		  mysql.logout();
-		        		  guiMain.jpNeuZeichnen("ZurLoginOberflaeche", datenbank);
+		    	  
+		    	  jlZahlenVerbZeit.setText(wMin+":"+wSek);
+		          
+		    	  if(wartezeitMin==0 && wartezeitSek==0){
+		        	  if(datenbank.getMaxWarteZeitsek() != -1){ //Abfrage ob jeamnd in warteschlange sitzt -> -1 wenn Schlange leer
+		        		  goToLogin();
 		        	  } else {
-		        		  wartezeitMin = 12;
-		        		  wartezeitSek = 20;
+		        		  wartezeitMin=14;
+		        		  wartezeitSek=59;
 		        	  }
-		        	  //-> Prüfen ob jemand in Warteschlange ist  z.B. checkWarteschlange();
+		        	  //-> JEde sekund hier
 		          }
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
+	}
+	
+	public void goToLogin() {
+		this.datenbank.abmelden();
+		// Stream etc beenden
+		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
 	}
 	
 	private JPanel fStream() {
@@ -193,9 +210,7 @@ public class GuiJPDrive extends JPanel{
     	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
     	cbAbblendlicht = new CIDIButton(iiAbblendlichtArray, "Abblendlicht schalten");
     	cbFernlicht = new CIDIButton(iiFernlichtArray, "Fernlicht schalten");
-    	cbHupe = new CIDIButton(iiHupeArray, "Hupe schalten");
     	
-    	jpFunktionen.add(cbHupe.getButton());
     	jpFunktionen.add(cbFernlicht.getButton());
     	jpFunktionen.add(cbAbblendlicht.getButton());
 		
@@ -259,24 +274,15 @@ public class GuiJPDrive extends JPanel{
 	    iiAbblendlichtArray = new ImageIcon[2];
 	    iiAbblendlichtArray[0] = new ImageIcon("src/buttons/abblendlicht_inaktiv.png");
 	    iiAbblendlichtArray[1] = new ImageIcon("src/buttons/abblendlicht_aktiv.png");
-	    
-	    iiHupeArray = new ImageIcon[2];
-	    iiHupeArray[0] = new ImageIcon("src/buttons/hupe_inaktiv.png");
-	    iiHupeArray[1] = new ImageIcon("src/buttons/hupe_aktiv.png");
 	}
 	
+	/////////////////Setzte Zeit zum Fahren ////////////////////////
 	private void zeitSetzen(){
-//		int sek = 20; //mysql.getTime();
-    	int sek = 325;
-    	if(sek != 6666){
-        	wartezeitSek=sek % 60;
-        	wartezeitMin=(sek-(sek%60))/60; 
-    	} else {
-    		System.out.println("-> Logischer Fehler ... GuiJPDrive zeitSetzen");
-    		wartezeitSek = 00;
-    		wartezeitMin = 00;
-    	}
+       	this.wartezeitSek=59;
+       	this.wartezeitMin=14; 
 	}
+	////////////////////////////////////////////////////////////////
+	
 	
 	public CIDIButton getFernlichtButton(){
 		return this.cbFernlicht;
@@ -302,12 +308,5 @@ public class GuiJPDrive extends JPanel{
 		return this.cbRechts;
 	}
 	
-	public CIDIButton getHupe(){
-		return this.cbHupe;
-	}
-
-	public DAO getDatenbank() {
-		return this.datenbank;
-	}	
 }
 

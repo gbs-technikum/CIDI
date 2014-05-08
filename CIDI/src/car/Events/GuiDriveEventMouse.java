@@ -23,14 +23,14 @@ public class GuiDriveEventMouse implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		this.cb.bildSchaltenAn();
-		this.cb.pinTogglen();
+//		this.cb.pinTogglen();
 		this.guiMain.requestFocus();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.cb.bildSchaltenAus();
-		this.cb.pinTogglen();
+//		this.cb.pinTogglen();
 		this.guiMain.requestFocus();
 	}
 

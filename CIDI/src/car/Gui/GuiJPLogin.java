@@ -44,15 +44,13 @@ public class GuiJPLogin extends JPanel{
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
 		this.datenbank = new DAO();
-		
-		setMaxWarteZeit();
+		this.datenbank.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 		
     	initComponents();
     	initEvents();
     }
 
 	private void initEvents() {
-//		countDownZaehler();
 
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		jbabbrechen.addActionListener(gdea);
@@ -65,32 +63,56 @@ public class GuiJPLogin extends JPanel{
 	}
 
 	private void countDownZaehler() {
-		int delay = 1000; //milliseconds  (zieht millisekunden)
+		int delay = 1000; //milliseconds  (zieht millisekunden ab)
 		
 		  ActionListener taskPerformer = new ActionListener() {
 		      public void actionPerformed(ActionEvent evt) {
+//		    	  System.out.println(wartezeitMin + " " + wartezeitSek);
+		          
+		          if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
+		        	  if(checkLogin()){
+		        		  System.out.println("in ZeitMethode");
+		        		  goToDrive();
+		        	  }
+		          } else {
+//		        	  System.out.println("-> Bitte warten bis Zeit abgelaufen ist"); //Jede sekunde hier
+		          }
+		    	  
 		    	  wartezeitSek--;
 		    	  if(wartezeitSek<0){
 		    		  wartezeitSek=59;
 		    		  wartezeitMin--;
 		    	  }
 		    	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
-		    	  if(wartezeitMin<10){
+		    	  
+		    	  if(wartezeitMin<10){ //nullstelle Minuten
 		    		  wMin = "0"+wartezeitMin;
 		    	  }
-		    	  if(wartezeitSek<10){
+		    	  if(wartezeitSek<10){	//nullstelle sekunden
 		    		  wSek="0"+wartezeitSek;
 		    	  }
 		          jlWarteZeit.setText(wMin+":"+wSek);
-		          if(wartezeitMin==0 && wartezeitSek==0 && checkLogin()){
-		          } else {
-		        	  System.out.println("-> Bitte warten bis Zeit abgelaufen ist");
-				}
+		          
+		          if(wartezeitSek%5 == 0){
+		        	  getTimesql();
+		          }
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
 	}
 
+    private void getTimesql() {
+    	System.out.println("getTimeSQL");
+    	int i = datenbank.getMaxWarteZeitsek();
+    	if(i != -1){    	
+    		this.wartezeitSek = i%60;
+    		this.wartezeitMin = i/60;
+    	} else {
+    		this.jlWarteZeit.setText("Sitzung ist frei!");
+    		this.wartezeitMin = -666;
+    	}
+	}
+	
 	private void initComponents() {
 		//Design 
 		lbKastl = new LineBorder(Color.gray,3);
@@ -103,8 +125,23 @@ public class GuiJPLogin extends JPanel{
         this.add(jpleft,BorderLayout.WEST);
         this.add(jprigth,BorderLayout.EAST);
         
-		//Hole Zeit von SQL-Datenbank
-		getTimesql();
+        //Timer
+		startTimer();
+	}
+
+	private void startTimer() {
+    	int i = datenbank.getMaxWarteZeitsek();
+    	System.out.println("in startTimer");
+    	System.out.println(i);
+    	if(i != -1){    	
+    		this.wartezeitSek = i%60;
+    		this.wartezeitMin = i/60;
+    		System.out.println(wartezeitMin + " : " + wartezeitSek );
+    		countDownZaehler();
+    	} else {
+    		this.jlWarteZeit.setText("Sitzung ist frei!");
+    		this.wartezeitMin = -666;
+    	}
 	}
 
 	private JPanel fjpRechts() {
@@ -171,22 +208,13 @@ public class GuiJPLogin extends JPanel{
 		
         return jplefti;
 	}
-    
-    private void getTimesql() {
-    	System.out.println("inlogin");
-    	int sek = 6666;
-    	System.out.println("loginsek:" + sek);
-    	if(sek != 6666){
-        	wartezeitSek=sek % 60;
-        	wartezeitMin=(sek-(sek%60))/60; 
-        	this.countDownZaehler();
-    	} else {
-    		System.out.println("uhr halt");
-    		this.jlWarteZeit.setText("Sitzung frei!");
-    	}
+  
+    public void goToDrive() {
+		felderLoeschen();
+		this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche", this.datenbank);
 	}
-	
-    private boolean isEmpty(JTextField input) {
+
+	private boolean isEmpty(JTextField input) {
 		if("".equals((String)input.getText()))
 			return true;
 		return false;
@@ -198,8 +226,10 @@ public class GuiJPLogin extends JPanel{
 		} else if(isEmpty((JTextField) jpassword)) {
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
-			if(checkLoginDaten());
-			return true;
+			if(checkLoginDaten()){
+				//logindaten korrekt -> entweder in Schlange anstellen oder sofort dran
+				return true;
+			}
 		}
 		return false;
 	}
@@ -207,24 +237,16 @@ public class GuiJPLogin extends JPanel{
 	public boolean checkLoginDaten(){
 		String tempPW = new String(this.jpassword.getPassword()); //zwischenspeichern für mehtode anmelden(String user, String pw)
 		
-		try {
-			if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
-				this.guiMain.jpNeuZeichnen("zuDriveOberflaeche", this.datenbank);
-				jbanmelden.setEnabled(false);
-				jtuser.setEditable(false);
-				jpassword.setEditable(false);
-				return true;
-			} else {
-				JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
-				return false;
-			}
-		} catch (HeadlessException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
+//			this.guiMain.jpNeuZeichnen("zuDriveOberflaeche", this.datenbank);
+			jbanmelden.setEnabled(false);
+			jtuser.setEditable(false);
+			jpassword.setEditable(false);
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+			return false;
 		}
-		System.out.println("-> false | In checkLoginDaten() ganz unten beim letzen return");
-		return false;
 	}
 
 	public JPasswordField getJpassword() {
@@ -246,18 +268,13 @@ public class GuiJPLogin extends JPanel{
 		jpassword.setEnabled(true);
 		jtuser.requestFocus();
 		jtuser.setEnabled(true);
+		jbanmelden.setEnabled(true);
 	}
 
 	public DAO getDatenbank() {
 		return this.datenbank;
 	}
 
-	private void setMaxWarteZeit() {
-		int i = datenbank.maxWarteZeitsek();
-		
-		this.wartezeitSek = i%60;
-		this.wartezeitMin = i/60;
-		
-	}
+
 	
 }

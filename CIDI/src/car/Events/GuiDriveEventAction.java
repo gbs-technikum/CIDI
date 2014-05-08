@@ -63,44 +63,52 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Anmelden":
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			if(this.guiLogin.checkLogin()){
-				this.guiLogin.checkLoginDaten();
-				//guiMain.jpNeuZeichnen("ZurDriveOberflaeche");
+				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == -1){
+					System.out.println("im Actionlistener");
+					this.guiLogin.goToDrive();
+				}
 			} 			
 			break;
 			
 		case "Sitzung Beenden":
-			logout();
+			this.guiDrive.goToLogin();
 			break;
 			
 		case "Zum Webshop":
 			//Start internet Explorer -> Amazon oder sonst was
 			System.out.println("Ab zum Webshop!");
 			break;
+		
+		case "Vorwaerts":
+			System.out.println("Vorwärts schalten");
+			break;
+
+		case "Rueckwaerts":
+			System.out.println("Rueckwaerts schalten");
+			break;
 			
-/*		case "Fernlicht schalten":
+		case "Links":
+			System.out.println("links schalten");
+			break;
+
+		case "Rechts":
+			System.out.println("rechts schalten");
+			break;
+			
+		case "Fernlicht schalten":
 			System.out.println("Fernlicht schalten");
-			guiDrive.getFernlichtButton().bildSchalten();
+			guiDrive.getFernlichtButton().pinTogglen();
 			guiMain.requestFocus();
 			break;
 			
 		case "Abblendlicht schalten":
 			System.out.println("Abblendlicht schalten");
-			guiDrive.getAbblendlichtButton().bildSchalten();
+			guiDrive.getAbblendlichtButton().pinTogglen();
 			guiMain.requestFocus();
-			break;   */
+			break;   
 		
 		default:
 			break;
 		}
-		
 	}
-
-	private void logout() {
-		this.guiDrive.getDatenbank().abmelden();
-		// Stream etc beenden
-		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
-		
-	}
-
-
 }

@@ -28,14 +28,11 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 			case KeyEvent.VK_RIGHT:
 				this.guiDrive.getRechts().bildSchaltenAn();
 				break;
-			case KeyEvent.VK_H:
-				this.guiDrive.getHupe().bildSchaltenAn();   //Hupe an
-				break;
 			case KeyEvent.VK_F:
-				this.guiDrive.getFernlichtButton().bildToggln();  //Fernlicht an/aus
+				this.guiDrive.getFernlichtButton().pinTogglen();  //Fernlicht an/aus
 				break;
 			case KeyEvent.VK_A:
-				this.guiDrive.getAbblendlichtButton().bildToggln();  //Abblendlicht an/aus
+				this.guiDrive.getAbblendlichtButton().pinTogglen();  //Abblendlicht an/aus
 				break;
 		}
 	}
@@ -55,15 +52,12 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 			case KeyEvent.VK_RIGHT:
 				this.guiDrive.getRechts().bildSchaltenAus();
 				break;
-			case KeyEvent.VK_H:
-				this.guiDrive.getHupe().bildSchaltenAus();  //Hupe aus
-				break;
-			case KeyEvent.VK_F:
-//				this.guiDrive.getFernlichtButton().bildSchalten();  //Fernlicht aus
+		/*	case KeyEvent.VK_F:
+				this.guiDrive.getFernlichtButton().bildToggln();  //Fernlicht aus
 				break;
 			case KeyEvent.VK_A:
-//				this.guiDrive.getAbblendlichtButton().bildSchalten();  //Abblendlicht aus
-				break;
+				this.guiDrive.getAbblendlichtButton().bildToggln();  //Abblendlicht aus
+				break;*/
 		}
 	}
 
