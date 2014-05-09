@@ -101,6 +101,7 @@ public class GuiJPLogin extends JPanel{
 		         
 		         if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
 		        	  System.out.println("Zum prüfen der logindaten");
+		        	  jlWarteZeit.setText("Sitzung Frei!");
 		        	  if(checkLoginFelder()){
 		        		  if(checkLoginDaten()){
 			        		  System.out.println("logindaten korrekt -> in ZeitMethode");
@@ -156,13 +157,11 @@ public class GuiJPLogin extends JPanel{
 	
     private void getTimesql() {
     	int i = datenbank.getMaxWarteZeitsek();
-    	System.out.println("getTimesql() " + i);
+    	System.out.println("getTimesql() wert von DAO" + i);
     	if(i != -1){
-        	System.out.println("getTimeSQL" + this.wartezeitMin + " : " + this.wartezeitSek);
     		this.wartezeitSek = i%60;
     		this.wartezeitMin = i/60;
     	} else {
-        	System.out.println("getTimeSQL" + this.wartezeitMin);
     		this.jlWarteZeit.setText("Sitzung ist frei!");
     		this.wartezeitMin = -666;
     	}
@@ -198,7 +197,7 @@ public class GuiJPLogin extends JPanel{
 	    JPanel jpWarteZeit = new JPanel();
 	    JLabel jlWartenText = new JLabel("Verbleibende Wartezeit ");
 	    jlWartenText.setBorder(new CompoundBorder(jlWartenText.getBorder(), lbKastl));
-	    jlWarteZeit = new JLabel("15:00");
+	    jlWarteZeit = new JLabel();
 	    jlWarteZeit.setBorder(new CompoundBorder(jlWarteZeit.getBorder(), lbKastl));
 	    jpWarteZeit.add(jlWartenText);
 	    jpWarteZeit.add(jlWarteZeit);

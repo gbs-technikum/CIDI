@@ -14,6 +14,7 @@ public class DAO {
 	private PreparedStatement pstlogin, psteintragen, pstwarteschlange, pstAnzUserVor, pstlogout, pst, pstgetsitzid;
 	private ResultSet rst;
 	private int idSitzung, idNutzer;
+	private boolean statusWarten;
 	
 	public DAO() {
 		//DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
@@ -100,14 +101,17 @@ public class DAO {
 		rst = pstwarteschlange.executeQuery();
 		if( rst.next() ){
 			rst.close();
+			this.statusWarten= true;
 			return "anstellen";
 		} 
+		this.statusWarten = false;
 		rst.close();
 		return "leer";
 	}
 
 	public int getMaxWarteZeitsek() {
 		try {
+			pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
 			rst = pstAnzUserVor.executeQuery();
 			int anzSchlange = 0;
 			if(rst.next()){
@@ -129,6 +133,10 @@ public class DAO {
 //					System.out.println(temp);  //Zeit von Methode
 					sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
 					rst.close();
+					System.out.println("Status warteschlange:  " + statusWarten);
+					if(statusWarten = true){
+						sek -= 900;
+					}
 					return (( 900 - sek )+ (anzSchlange * 900));  // (900sek-ZeitbisJetztGefahren) + AnzWartendeUser * 60Sek * 15 min
 				}
 			}
@@ -174,6 +182,7 @@ public class DAO {
 			pst = con.prepareStatement("UPDATE sitzung SET beginnSteuerung=NOW() WHERE id_sitzung="+ (sitzungsID+1));
 			pst.executeUpdate();
 			rst.close();
+			statusWarten = false;
 			return true;
 		}
 		System.out.println("Nichts neues wird gebucht da keine Ansteht");
@@ -227,13 +236,15 @@ public class DAO {
 	}
 	
 	public static void main(String[] args) {
-//		DAO d = new DAO();
-//		d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		DAO d = new DAO();
+		d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 		
 //		System.out.println(d.anmelden("becker", "becker"));
 //			System.out.println(d.anmelden("huber", "huber"));
 //			System.out.println(d.anmelden("admin", "admin"));
-//			System.out.println(d.getMaxWarteZeitsek());
+		System.out.println(d.getMaxWarteZeitsek());
+		System.out.println(d.getMaxWarteZeitsek());
+		System.out.println(d.getMaxWarteZeitsek());
 //			System.out.println(d.abmelden());
 			
 	}

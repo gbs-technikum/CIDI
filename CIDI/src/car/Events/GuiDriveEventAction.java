@@ -64,7 +64,8 @@ public class GuiDriveEventAction implements ActionListener{
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			System.out.println("in Actionlistener");
 			if(this.guiLogin.checkLogin() && this.guiLogin.checkLoginDaten()){
-				System.out.println("Anmelden korrekt");
+				System.out.println("Anmelden korrekt -> AL");
+				System.out.println(this.guiLogin.getDatenbank().getMaxWarteZeitsek());
 				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == 900){
 					System.out.println("login korrekt prüfen ob man drann ist");
 					this.guiLogin.goToDrive();
