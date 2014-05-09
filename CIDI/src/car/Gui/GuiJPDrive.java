@@ -189,6 +189,7 @@ public class GuiJPDrive extends JPanel{
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
+		  
 	}
 	
 	public void goToLogin() {

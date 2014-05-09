@@ -61,6 +61,7 @@ public class DAO {
 					psteintragen = con.prepareStatement("UPDATE benutzer SET useFlag=true WHERE id=" + this.idNutzer);
 					psteintragen.executeUpdate();
 					rst.close();
+					System.out.println("DAO leer -> anmelden()");
 					return true;
 					}
 				case "anstellen":{
@@ -68,6 +69,7 @@ public class DAO {
 					psteintragen = con.prepareStatement("INSERT INTO sitzung (id_benutzer, login) VALUES(" + this.idNutzer + ", NOW())");
 					psteintragen.executeUpdate();
 					rst.close();
+					System.out.println("DAO anstellen -> anmelden()");
 					return true;
 					}
 

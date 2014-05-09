@@ -87,7 +87,6 @@ public class GuiJFrameMain extends JFrame{
 			this.pack();
 			break;
 		case "ZurDriveOberflaeche":
-			System.out.println("Neu Zeichen Gui Drive");
 			gjd = new GuiJPDrive(this, db);
 			c.removeAll();
 			standardJFrameBauen();

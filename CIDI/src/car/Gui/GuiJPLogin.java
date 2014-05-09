@@ -36,7 +36,7 @@ public class GuiJPLogin extends JPanel{
     private int wartezeitMin, wartezeitSek;
     private JLabel jlWarteZeit;
     private DAO datenbank;
-	
+	private ActionListener taskPerformer;
     private GuiJFrameMain guiMain;
     
     public GuiJPLogin(GuiJFrameMain guiMain){
@@ -49,58 +49,6 @@ public class GuiJPLogin extends JPanel{
     	initComponents();
     	initEvents();
     }
-
-	private void initEvents() {
-
-		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
-		jbabbrechen.addActionListener(gdea);
-		jbanmelden.addActionListener(gdea);
-		
-		GuiDriveEventKey gdek = new GuiDriveEventKey(this);
-		jtuser.addKeyListener(gdek);
-		jpassword.addKeyListener(gdek);
-		
-	}
-
-	private void countDownZaehler() {
-		int delay = 1000; //milliseconds  (zieht millisekunden ab)
-		
-		  ActionListener taskPerformer = new ActionListener() {
-		      public void actionPerformed(ActionEvent evt) {
-		    	  System.out.println(wartezeitMin + " " + wartezeitSek);
-		          
-		          if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
-		        	  System.out.println("Zum prüfen der logindaten");
-		        	  if(checkLogin()){
-		        		  System.out.println("in ZeitMethode");
-		        		  goToDrive();
-		        	  }
-		          } else {
-//		        	  System.out.println("-> Bitte warten bis Zeit abgelaufen ist"); //Jede sekunde hier
-		          }
-		    	  
-		    	  wartezeitSek--;
-		    	  if(wartezeitSek<0){
-		    		  wartezeitSek=59;
-		    		  wartezeitMin--;
-		    	  }
-		    	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
-		    	  
-		    	  if(wartezeitMin<10){ //nullstelle Minuten
-		    		  wMin = "0"+wartezeitMin;
-		    	  }
-		    	  if(wartezeitSek<10){	//nullstelle sekunden
-		    		  wSek="0"+wartezeitSek;
-		    	  }
-		          jlWarteZeit.setText(wMin+":"+wSek);
-		          
-		          if(wartezeitSek%5 == 0){
-		        	  getTimesql();
-		          }
-		      }
-		  };
-		  new Timer(delay, taskPerformer).start();
-	}
 
 	private void initComponents() {
 		//Design 
@@ -117,15 +65,104 @@ public class GuiJPLogin extends JPanel{
         //Timer
 		startTimer();
 	}
+    
+	private void initEvents() {
 
+		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
+		jbabbrechen.addActionListener(gdea);
+		jbanmelden.addActionListener(gdea);
+		
+		GuiDriveEventKey gdek = new GuiDriveEventKey(this);
+		jtuser.addKeyListener(gdek);
+		jpassword.addKeyListener(gdek);
+		
+	}
+
+	private void countDownZaehler(int art) {
+		int delay = 1000; //milliseconds  (zieht millisekunden ab)
+		System.out.println("in countdownzaehler oben");
+		if(art == 1){
+			System.out.println("Countdown wähler: timer A");
+			taskPerformer = countDownA();
+		} else if (art == -1) {
+			System.out.println("Countdown wähler: timer B");
+			taskPerformer = countDownB();
+		}
+		if(taskPerformer != null){
+		    new Timer(delay, taskPerformer).start();			
+		}
+	}
+
+	private ActionListener countDownA(){
+   	  	System.out.println("Timer A oben: " + wartezeitMin + " " + wartezeitSek);		
+		 ActionListener taskPerformer = new ActionListener() {
+			 public void actionPerformed(ActionEvent evt) {
+		   	  	System.out.println("Timer A in actionperformer: " + wartezeitMin + " " + wartezeitSek);
+		         
+		         if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
+		        	  System.out.println("Zum prüfen der logindaten");
+		        	  if(checkLoginFelder()){
+		        		  if(checkLoginDaten()){
+			        		  System.out.println("logindaten korrekt -> in ZeitMethode");
+			        		  goToDrive();		        			  
+		        		  }
+		        	  }
+		          }
+			    	  
+		    	  wartezeitSek--;
+		    	  if(wartezeitSek<0){
+		    		  wartezeitSek=59;
+		    		  wartezeitMin--;
+			   	  }
+			   	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
+			    	  
+			    	  if(wartezeitMin<10){ //nullstelle Minuten
+		    		  wMin = "0"+wartezeitMin;
+		    	  }
+		    	  if(wartezeitSek<10){	//nullstelle sekunden
+		    		  wSek="0"+wartezeitSek;
+		    	  }
+		          jlWarteZeit.setText(wMin+":"+wSek);
+		          
+		          //Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
+		          if(wartezeitSek%5 == 0){	
+		        	  getTimesql();
+		          }
+		      }
+		  };
+		  return taskPerformer;
+	}
+	
+	private ActionListener countDownB(){
+		 ActionListener taskPerformer = new ActionListener() {
+			 public void actionPerformed(ActionEvent evt) {
+		   	  	System.out.println("Timer B in actionperformer");
+		         
+		    	  wartezeitSek--;
+		    	  if(wartezeitSek<0){
+		    		  wartezeitSek=60;
+			   	  }
+			    	  
+		          //Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
+		          if(wartezeitSek%5 == 0){
+		        	  System.out.println("prüfe ob sich Zeit ändert");
+		        	  getTimesql();
+		          }
+		      } 
+		  };
+		  return taskPerformer;
+	}
+	
+	
     private void getTimesql() {
-    	System.out.println("getTimeSQL");
     	int i = datenbank.getMaxWarteZeitsek();
-    	
-    	if(i != -1){    	
+    	System.out.println("getTimesql() " + i);
+    	if(i != -1){
+        	System.out.println("getTimeSQL" + this.wartezeitMin + " : " + this.wartezeitSek);
     		this.wartezeitSek = i%60;
     		this.wartezeitMin = i/60;
     	} else {
+        	System.out.println("getTimeSQL" + this.wartezeitMin);
     		this.jlWarteZeit.setText("Sitzung ist frei!");
     		this.wartezeitMin = -666;
     	}
@@ -133,17 +170,16 @@ public class GuiJPLogin extends JPanel{
 	
 	private void startTimer() {
     	int i = datenbank.getMaxWarteZeitsek();
-    	System.out.println("in startTimer");
-    	System.out.println(i);
+    	System.out.println("startTimer() wert von DAO: " + i);
     	if(i != -1){    	
     		this.wartezeitSek = i%60;
     		this.wartezeitMin = i/60;
-    		System.out.println(wartezeitMin + " : " + wartezeitSek );
-    		countDownZaehler();
+    		System.out.println("Errechnet startTimer: " + wartezeitMin + " : " + wartezeitSek );
+    		countDownZaehler(1);
     	} else {
     		this.jlWarteZeit.setText("Sitzung ist frei!");
     		this.wartezeitMin = -666;
-    		System.out.println("sitzung frei -> start Timer");
+    		countDownZaehler(-1);
     	}
 	}
 
@@ -214,7 +250,6 @@ public class GuiJPLogin extends JPanel{
   
     public void goToDrive() {
 		felderLoeschen();
-		System.out.println("go to Drive");
 		this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche", this.datenbank);
 	}
 
@@ -224,17 +259,24 @@ public class GuiJPLogin extends JPanel{
 		return false;
 	}
     
+	public boolean checkLoginFelder(){
+		if(isEmpty((JTextField) jtuser) || isEmpty((JTextField) jpassword)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	public boolean checkLogin() {
 		if(isEmpty((JTextField) jtuser)) {
 			JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
 		} else if(isEmpty((JTextField) jpassword)) {
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
-			if(checkLoginDaten()){
-				System.out.println("Zeile 232 -> checklogin");
+//			if(checkLoginDaten()){
 				//logindaten korrekt -> entweder in Schlange anstellen oder sofort dran
 				return true;
-			}
+//			}
 		}
 		return false;
 	}
