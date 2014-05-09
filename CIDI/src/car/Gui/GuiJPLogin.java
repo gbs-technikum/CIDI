@@ -43,8 +43,8 @@ public class GuiJPLogin extends JPanel{
 
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
-		this.datenbank = new DAO();
-		this.datenbank.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+//		this.datenbank = new DAO();
+//		this.datenbank.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 		
     	initComponents();
     	initEvents();
@@ -60,10 +60,10 @@ public class GuiJPLogin extends JPanel{
 		
 		//This - Panel Zambauen
         this.add(jpleft,BorderLayout.WEST);
-        this.add(jprigth,BorderLayout.EAST);
+        this.add(jprigth,BorderLayout.CENTER);
         
         //Timer
-		startTimer();
+//		startTimer();
 	}
     
 	private void initEvents() {

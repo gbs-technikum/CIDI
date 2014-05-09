@@ -16,7 +16,7 @@ public class DAO {
 	private int idSitzung, idNutzer;
 	
 	public DAO() {
-		//DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+//		DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 	}
 	
 	public void verbindungAufbauen(String url, String user, String pw){
