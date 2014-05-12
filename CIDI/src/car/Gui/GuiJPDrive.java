@@ -46,14 +46,26 @@ public class GuiJPDrive extends JPanel{
 		initComponents();
     	initEvents();
     }
+    
+    /**
+     * 
+     *  !!!! NUR ZU TESTZWECKEN !!!!
+     */
+    public GuiJPDrive(){
+    	this.setLayout(new BorderLayout());
 
+		initComponents();
+    	initEvents();
+    }
+
+    
 	private void initEvents() {
 		
 		countDownZaehler();
 		
 		GuiDriveEventAction gdea = new GuiDriveEventAction(this, guiMain);
 		
-		//GuiDriveEventAciton - Breich
+		//GuiDriveEventAciton - Bereich
 		cbFernlicht.getButton().addActionListener(gdea);
 		cbAbblendlicht.getButton().addActionListener(gdea);
 		cbVorwaerts.getButton().addActionListener(gdea);
@@ -62,7 +74,7 @@ public class GuiJPDrive extends JPanel{
 		cbRueckwaerts.getButton().addActionListener(gdea);
 		jbVerbindungBeenden.addActionListener(gdea);
 		
-		//GuiDriveEventMouse - Breich		
+		//GuiDriveEventMouse - Bereich		
 		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts, guiMain));
 		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks, guiMain));
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
@@ -277,7 +289,7 @@ public class GuiJPDrive extends JPanel{
 	    iiAbblendlichtArray[1] = new ImageIcon("src/buttons/abblendlicht_aktiv.png");
 	}
 	
-	/////////////////Setzte Zeit zum Fahren ////////////////////////
+	/////////////////Setze Zeit zum fahren ////////////////////////
 	private void zeitSetzen(){
        	this.wartezeitSek=59;
        	this.wartezeitMin=14; 
@@ -308,6 +320,9 @@ public class GuiJPDrive extends JPanel{
 	public CIDIButton getRechts(){
 		return this.cbRechts;
 	}
-	
+
+	public static void main(String[] args) {
+		new GuiJPDrive();
+	}
 }
 

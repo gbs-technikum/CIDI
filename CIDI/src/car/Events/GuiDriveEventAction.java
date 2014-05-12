@@ -71,7 +71,6 @@ public class GuiDriveEventAction implements ActionListener{
 				}
 
 			}
-
 			break;
 			
 		case "Sitzung Beenden":
