@@ -24,22 +24,20 @@ public class GuiJPStart extends JPanel{
 	}
 
 	private void initEvents() {
-		gdea = new GuiDriveEventAction(guiMain);
-		
-		jbZurAnmeldung.addActionListener(gdea);
-		
+		gdea = new GuiDriveEventAction(guiMain);	
+		jbZurAnmeldung.addActionListener(gdea);		
 	}
 
 	private void initComponents() {
 		this.setLayout(new BorderLayout());
 		
-		JLabel jlbild = new JLabel(new ImageIcon("src/bilder/start.jpg"));
+		JLabel jlbild = new JLabel(new ImageIcon(getClass().getResource("/bilder/start.jpg")));
+//		JLabel jlbild = new JLabel(new ImageIcon("src/bilder/start.jpg"));
     	
 		JPanel jpMittig = new JPanel();
     	jbZurAnmeldung = new JButton("Weiter zur Anmeldung!");
     	jbZurAnmeldung.setActionCommand("ZumLogin");
-    	jpMittig.add(jbZurAnmeldung);
-    	
+    	jpMittig.add(jbZurAnmeldung);  	
     	this.add(jlbild,BorderLayout.NORTH);
     	this.add(jpMittig, BorderLayout.CENTER);
 	}
