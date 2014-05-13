@@ -55,7 +55,6 @@ public class Controller {
 		pinrlicht.setState(alicht);
 		pinflicht.setState(flicht);
 		pinrflicht.setState(down);
-
 	}
 
 	// Verbindung zu den Pins schlieﬂen
