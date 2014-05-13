@@ -16,14 +16,12 @@ import java.awt.event.ActionListener;
 import car.Gui.GuiJFrameMain;
 import car.Gui.GuiJPDrive;
 import car.Gui.GuiJPLogin;
-import car.Hilfsklassen.DAO;
 
 public class GuiDriveEventAction implements ActionListener{
 	
 	private GuiJFrameMain guiMain;
 	private GuiJPLogin guiLogin;
 	private GuiJPDrive guiDrive;
-	private DAO datenbank;
 	
 	public GuiDriveEventAction(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
@@ -50,7 +48,7 @@ public class GuiDriveEventAction implements ActionListener{
 		switch (event) {
 		case "ZumLogin":
 			System.out.println("-> Zum Login");
-			guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
+			guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null, null);
 			break;
 
 		case "Abbrechen":
@@ -63,16 +61,15 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Anmelden":
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			System.out.println("in Actionlistener");
-			if(this.guiLogin.checkLogin() && this.guiLogin.checkLoginDaten()){
+			if(this.guiLogin.checkLoginDaten()){
 				System.out.println("Anmelden korrekt -> AL");
 				System.out.println(this.guiLogin.getDatenbank().getMaxWarteZeitsek());
-				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == 900){
-					System.out.println("login korrekt prüfen ob man drann ist");
+				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == 900 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
+					System.out.println("-> BeginnGuiDrive -> Steuerung");
+					this.guiLogin.getMyTimer().stop();
 					this.guiLogin.goToDrive();
 				}
-
 			}
-
 			break;
 			
 		case "Sitzung Beenden":

@@ -18,15 +18,19 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_UP:
 				this.guiDrive.getVorwarets().bildSchaltenAn(); //Vorwärtsknopschalten
+				System.out.println("Vorwärts schalten k");
 				break;
 			case KeyEvent.VK_DOWN:
 				this.guiDrive.getRueckwaerts().bildSchaltenAn();
+				System.out.println("Rückwärts schalten k");
 				break;
 			case KeyEvent.VK_LEFT:
 				this.guiDrive.getLinks().bildSchaltenAn();
+				System.out.println("Links schalten k");
 				break;
 			case KeyEvent.VK_RIGHT:
 				this.guiDrive.getRechts().bildSchaltenAn();
+				System.out.println("Rechts schalten k");
 				break;
 			case KeyEvent.VK_F:
 				this.guiDrive.getFernlichtButton().pinTogglen();  //Fernlicht an/aus

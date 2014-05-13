@@ -1,6 +1,7 @@
 package car.Gui;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -18,11 +19,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
 import car.Events.GuiDriveEventAction;
-import car.Events.GuiDriveEventKey;
 import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
 import car.Hilfsklassen.DAO;
+import car.Hilfsklassen.Player;
 
 public class GuiJPDrive extends JPanel{
 	
@@ -34,11 +35,16 @@ public class GuiJPDrive extends JPanel{
     private JButton jbVerbindungBeenden;
     private JLabel jlZahlenVerbZeit, jlNutzerName;
     private DAO datenbank;
+    private Canvas cStreambereich;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
 	
-    public GuiJPDrive(GuiJFrameMain guiMain, DAO db){
+    public GuiJPDrive(GuiJFrameMain guiMain, DAO db, Canvas cStreambereich){
+//    	this.cStreambereich = new Canvas();
+//    	this.cStreambereich.setSize(300, 200);
+//    	this.cStreambereich.setBackground(Color.RED);
+//    	this.cStreambereich = cStreambereich;
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
 		this.datenbank = db;
@@ -59,7 +65,7 @@ public class GuiJPDrive extends JPanel{
 		cbVorwaerts.getButton().addActionListener(gdea);
 		cbLinks.getButton().addActionListener(gdea);
 		cbRueckwaerts.getButton().addActionListener(gdea);
-		cbRueckwaerts.getButton().addActionListener(gdea);
+		cbRechts.getButton().addActionListener(gdea);
 		jbVerbindungBeenden.addActionListener(gdea);
 		
 		//GuiDriveEventMouse - Breich		
@@ -68,10 +74,6 @@ public class GuiJPDrive extends JPanel{
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
 		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts, guiMain));
 		
-		
-		//GuiDriveEventKey - Bereich
-//		GuiDriveEventKey gdek = new GuiDriveEventKey();
-//		cbVorwaerts.getButton().addKeyListener(gdek);
 		
 		//GuiDriveEventKeySteuerung - Bereich 
 		GuiDriveEventKeySteuerung gdeks = new GuiDriveEventKeySteuerung(this);
@@ -90,7 +92,7 @@ public class GuiJPDrive extends JPanel{
 		
 		//Auf KlassenPanel Bauen
 		this.add(jpRechts,BorderLayout.EAST);
-		this.add(jpLinks,BorderLayout.WEST);
+		this.add(jpLinks,BorderLayout.CENTER);
 	}
 	
 	private JPanel fMainPanelLinks() {
@@ -98,9 +100,10 @@ public class GuiJPDrive extends JPanel{
         jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.red,3)));
         jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
         
-      //Stream von Webcam
-        JPanel jpStream = fStream();
-		
+        //Stream von Webcam
+        cStreambereich = new Canvas();
+        Player.startPlayer(cStreambereich);
+        
         //BewegungsTasten
         JPanel jpBewegungsTasten = fSteuertasten();
         
@@ -108,7 +111,7 @@ public class GuiJPDrive extends JPanel{
     	JPanel jpFunktionen = fFunktionstasten();
 		
     	//Auf jplinks bauen
-    	jplinks.add(jpStream);
+    	jplinks.add(cStreambereich);
     	jplinks.add(jpFunktionen);
     	jplinks.add(jpBewegungsTasten);
     	
@@ -195,14 +198,7 @@ public class GuiJPDrive extends JPanel{
 	public void goToLogin() {
 		this.datenbank.abmelden();
 		// Stream etc beenden
-		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null);
-	}
-	
-	private JPanel fStream() {
-		JLabel jlTestBild = new JLabel(new ImageIcon("src/bilder/test.jpg"));
-        JPanel jpStream = new JPanel();
-        jpStream.add(jlTestBild);
-		return jpStream;
+		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null, null);
 	}
 	
 	private JPanel fFunktionstasten() {

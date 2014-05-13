@@ -1,18 +1,13 @@
 package car.Gui;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
-import javax.swing.ImageIcon;
-import javax.swing.InputVerifier;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,6 +20,7 @@ import javax.swing.border.LineBorder;
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveEventKey;
 import car.Hilfsklassen.DAO;
+import car.Hilfsklassen.Player;
 
 public class GuiJPLogin extends JPanel{
 
@@ -38,6 +34,8 @@ public class GuiJPLogin extends JPanel{
     private DAO datenbank;
 	private ActionListener taskPerformer;
     private GuiJFrameMain guiMain;
+	private final Timer myTimer = new Timer(1000, null); //1000 für millisek
+	private Canvas cStreambereich;
     
     public GuiJPLogin(GuiJFrameMain guiMain){
 
@@ -79,21 +77,20 @@ public class GuiJPLogin extends JPanel{
 	}
 
 	private void countDownZaehler(int art) {
-		int delay = 1000; //milliseconds  (zieht millisekunden ab)
-		System.out.println("in countdownzaehler oben");
 		if(art == 1){
-			System.out.println("Countdown wähler: timer A");
-			taskPerformer = countDownA();
+			System.out.println("Countdown wähle: timer A");
+			taskPerformer = countDownA(); //fährt jemand
 		} else if (art == -1) {
-			System.out.println("Countdown wähler: timer B");
-			taskPerformer = countDownB();
+			System.out.println("Countdown wähle: timer B");
+			taskPerformer = countDownB(); //fährt niemand
 		}
 		if(taskPerformer != null){
-		    new Timer(delay, taskPerformer).start();			
+		     myTimer.addActionListener(taskPerformer);
+		     myTimer.start();
 		}
 	}
 
-	private ActionListener countDownA(){
+	private ActionListener countDownA(){   //Es fährt jemand... es muss zeit gesetzt und runtergezählt werden
    	  	System.out.println("Timer A oben: " + wartezeitMin + " " + wartezeitSek);		
 		 ActionListener taskPerformer = new ActionListener() {
 			 public void actionPerformed(ActionEvent evt) {
@@ -102,11 +99,10 @@ public class GuiJPLogin extends JPanel{
 		         if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
 		        	  System.out.println("Zum prüfen der logindaten");
 		        	  jlWarteZeit.setText("Sitzung Frei!");
-		        	  if(checkLoginFelder()){
-		        		  if(checkLoginDaten()){
-			        		  System.out.println("logindaten korrekt -> in ZeitMethode");
-			        		  goToDrive();		        			  
-		        		  }
+		        	  if(checkLoginDaten()){
+			       		  System.out.println("logindaten korrekt -> in ZeitMethode -> ab zum Steuern");
+			       		  myTimer.stop();
+			       		  goToDrive();		        			  
 		        	  }
 		          }
 			    	  
@@ -116,7 +112,6 @@ public class GuiJPLogin extends JPanel{
 		    		  wartezeitMin--;
 			   	  }
 			   	  String wMin=""+wartezeitMin,wSek=""+wartezeitSek;
-			    	  
 			    	  if(wartezeitMin<10){ //nullstelle Minuten
 		    		  wMin = "0"+wartezeitMin;
 		    	  }
@@ -124,9 +119,7 @@ public class GuiJPLogin extends JPanel{
 		    		  wSek="0"+wartezeitSek;
 		    	  }
 		          jlWarteZeit.setText(wMin+":"+wSek);
-		          
-		          //Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
-		          if(wartezeitSek%5 == 0){	
+		          if(wartezeitSek%5 == 0){	//Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
 		        	  getTimesql();
 		          }
 		      }
@@ -134,7 +127,7 @@ public class GuiJPLogin extends JPanel{
 		  return taskPerformer;
 	}
 	
-	private ActionListener countDownB(){
+	private ActionListener countDownB(){			//Wenn Sitzung frei ... bei eingabe prüfen ob sich nciht jemadn wärenddessen anmeldet
 		 ActionListener taskPerformer = new ActionListener() {
 			 public void actionPerformed(ActionEvent evt) {
 		   	  	System.out.println("Timer B in actionperformer");
@@ -146,8 +139,11 @@ public class GuiJPLogin extends JPanel{
 			    	  
 		          //Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
 		          if(wartezeitSek%5 == 0){
-		        	  System.out.println("prüfe ob sich Zeit ändert");
+		        	  System.out.println("prüfe ob jetzt jemand fährt");
 		        	  getTimesql();
+		        	  if(wartezeitMin != -666){	//Wenn sich wärend des Tippens jemand anmeldet CoundownA starten
+		        		  countDownA();
+		        	  }
 		          }
 		      } 
 		  };
@@ -192,7 +188,12 @@ public class GuiJPLogin extends JPanel{
 	    jpText.add(jlStreamText);
 	    jpText.setBorder(new CompoundBorder(jpText.getBorder(), lbKastl));
 	    
-	    JLabel jlStream = new JLabel(new ImageIcon("src/bilder/test.jpg"));
+	    //CANVAS für STREAM************************
+	    cStreambereich = new Canvas();
+//	    cStreambereich.setSize(300, 200);
+//	    cStreambereich.setBackground(Color.RED);
+	    Player.startPlayer(cStreambereich);
+	    //******************************************
 	    
 	    JPanel jpWarteZeit = new JPanel();
 	    JLabel jlWartenText = new JLabel("Verbleibende Wartezeit ");
@@ -203,7 +204,7 @@ public class GuiJPLogin extends JPanel{
 	    jpWarteZeit.add(jlWarteZeit);
 	     
 	    jptempright.add(jpText, BorderLayout.NORTH);
-	    jptempright.add(jlStream, BorderLayout.CENTER);
+	    jptempright.add(cStreambereich, BorderLayout.WEST);
 	    jptempright.add(jpWarteZeit, BorderLayout.SOUTH);
 	       
 	    return jptempright;
@@ -249,7 +250,7 @@ public class GuiJPLogin extends JPanel{
   
     public void goToDrive() {
 		felderLoeschen();
-		this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche", this.datenbank);
+		this.guiMain.jpNeuZeichnen("ZurDriveOberflaeche", this.datenbank, this.cStreambereich);
 	}
 
 	private boolean isEmpty(JTextField input) {
@@ -258,22 +259,13 @@ public class GuiJPLogin extends JPanel{
 		return false;
 	}
     
-	public boolean checkLoginFelder(){
-		if(isEmpty((JTextField) jtuser) || isEmpty((JTextField) jpassword)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
+
 	public boolean checkLogin() {
 		if(isEmpty((JTextField) jtuser)) {
 			JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
 		} else if(isEmpty((JTextField) jpassword)) {
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
-//			if(checkLoginDaten()){
-				//logindaten korrekt -> entweder in Schlange anstellen oder sofort dran
 				return true;
 //			}
 		}
@@ -281,17 +273,20 @@ public class GuiJPLogin extends JPanel{
 	}
 
 	public boolean checkLoginDaten(){
-		String tempPW = new String(this.jpassword.getPassword()); //zwischenspeichern für mehtode anmelden(String user, String pw)
-		
-		if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
-//			this.guiMain.jpNeuZeichnen("zuDriveOberflaeche", this.datenbank);
-			jbanmelden.setEnabled(false);
-			jtuser.setEditable(false);
-			jpassword.setEditable(false);
-			return true;
-		} else {
-			JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+		if(isEmpty((JTextField) jtuser) || isEmpty((JTextField) jpassword)) {  //Prüfen ob LoginFelder leer sind Um eingabedaten zu prüfen
 			return false;
+		} else {
+			String tempPW = new String(this.jpassword.getPassword()); //zwischenspeichern für mehtode anmelden(String user, String pw)
+		
+			if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
+				jbanmelden.setEnabled(false);
+				jtuser.setEditable(false);
+				jpassword.setEditable(false);
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+				return false;
+			}
 		}
 	}
 
@@ -317,6 +312,10 @@ public class GuiJPLogin extends JPanel{
 		jbanmelden.setEnabled(true);
 	}
 
+	public Timer getMyTimer(){
+		return this.myTimer;
+	}
+	
 	public DAO getDatenbank() {
 		return this.datenbank;
 	}
