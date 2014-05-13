@@ -6,16 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class DAO {
 
 	private Connection con;
 	private PreparedStatement pstlogin, psteintragen, pstwarteschlange, pstAnzUserVor, pstlogout, pst, pstgetsitzid;
 	private ResultSet rst;
 	private int idSitzung, idNutzer;
+	private boolean statusWarten;
 	
 	public DAO() {
-//		DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		//DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 	}
 	
 	public void verbindungAufbauen(String url, String user, String pw){
@@ -99,37 +99,39 @@ public class DAO {
 		rst = pstwarteschlange.executeQuery();
 		if( rst.next() ){
 			rst.close();
+			this.statusWarten= true;
 			return "anstellen";
 		} 
+		this.statusWarten = false;
 		rst.close();
 		return "leer";
 	}
 
 	public int getMaxWarteZeitsek() {
 		try {
+			pstAnzUserVor = con.prepareStatement("SELECT TIMEDIFF(NOW(), beginnSteuerung) FROM sitzung WHERE beginnSteuerung!='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00'");
 			rst = pstAnzUserVor.executeQuery();
-			int anzSchlange = 0;
-			if(rst.next()){
-				if(rst.getInt(1) != 1){
-					anzSchlange = rst.getInt(1)-1;
-				} else {
-					anzSchlange = 0;
-				}
-				pstAnzUserVor = con.prepareStatement("SELECT TIMEDIFF(NOW(), beginnSteuerung) FROM sitzung WHERE endeSteuerung='0000-00-00 00:00:00' AND beginnSteuerung!='0000-00-00 00:00:00'");
+			int sek = 0;
+			if( rst.next() ){  //Gibt es jemanden Und wenn wie lange darf er noch fahren?
+				String temp = rst.getString(1); //geprüft, geht
+//				System.out.println(temp);  //Zeit von Methode
+				sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
+				//in var sek sind nun wartesekunden in int gespeichert
+				
+				pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE beginnSteuerung='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
 				rst = pstAnzUserVor.executeQuery();
-				int sek = 0;
-				if(anzSchlange == -1){
-//					System.out.println("WarteSchlange leer return -1 anmeldung kann erfolgen -> getMaxWarteZeitsek");
-					rst.close();
-					return -1;
-				}
-				if( rst.next() ){
-					String temp = rst.getString(1); //geprüft, geht
-//					System.out.println(temp);  //Zeit von Methode
-					sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
-					rst.close();
-					return (( 900 - sek )+ (anzSchlange * 900));  // (900sek-ZeitbisJetztGefahren) + AnzWartendeUser * 60Sek * 15 min
-				}
+				int anzSchlange = 0;
+				if(rst.next()){	//Gibt und wie viele sind noch in der Warteschlange
+					anzSchlange = rst.getInt(1);
+					if(this.statusWarten = true){
+						anzSchlange--;
+					}
+					System.out.println("Status warteschlange:  " + statusWarten);
+				} 
+				return (( 900 - sek ) + (anzSchlange * 900));  // (900sek-ZeitbisJetztGefahren) + AnzWartendeUser * 60Sek * 15 min
+			} else {
+				// Es gibt keinen der Fährt, daher return -1
+				return -1;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -160,6 +162,15 @@ public class DAO {
 			this.idSitzung = -1;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.statusWarten = false;   //Rücksetzten der Variablen für ist in Warteschlange
+			if(rst != null){
+				try {
+					rst.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}	
 		
@@ -172,7 +183,6 @@ public class DAO {
 			pst.executeUpdate();
 			pst = con.prepareStatement("UPDATE sitzung SET beginnSteuerung=NOW() WHERE id_sitzung="+ (sitzungsID+1));
 			pst.executeUpdate();
-			rst.close();
 			return true;
 		}
 		System.out.println("Nichts neues wird gebucht da keine Ansteht");
@@ -193,6 +203,7 @@ public class DAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
+			this.statusWarten = false;   //Rücksetzten der Variablen für ist in Warteschlange
 			if(rst != null){
 				try {
 					rst.close();
@@ -226,14 +237,16 @@ public class DAO {
 	}
 	
 	public static void main(String[] args) {
-//		DAO d = new DAO();
-//		d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		DAO d = new DAO();
+		d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
 		
 //		System.out.println(d.anmelden("becker", "becker"));
 //			System.out.println(d.anmelden("huber", "huber"));
 //			System.out.println(d.anmelden("admin", "admin"));
-//			System.out.println(d.getMaxWarteZeitsek());
-//			System.out.println(d.abmelden());
+//		System.out.println(d.getMaxWarteZeitsek());
+//		System.out.println(d.getMaxWarteZeitsek());
+//		System.out.println(d.getMaxWarteZeitsek());
+			d.abmelden();
 			
 	}
 

@@ -36,7 +36,7 @@ public class Controller {
 		// flicht
 		pinflicht = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05,PinState.LOW);
 
-		// rückfahrlicht
+		// rÃ¼ckfahrlicht
 		pinrflicht = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06,PinState.LOW);
 
 	}
@@ -45,7 +45,7 @@ public class Controller {
 		return instance;
 	}
 
-	// boolean werte von SENTDATA entgegennehmen und an die Pins übergeben
+	// boolean werte von SENTDATA entgegennehmen und an die Pins Ã¼bergeben
 	public void drive(boolean left, boolean right, boolean up, boolean down,boolean flicht, boolean alicht) {
 		pinleft.setState(left);
 		pinright.setState(right);
@@ -55,9 +55,10 @@ public class Controller {
 		pinrlicht.setState(alicht);
 		pinflicht.setState(flicht);
 		pinrflicht.setState(down);
+
 	}
 
-	// Verbindung zu den Pins schließen
+	// Verbindung zu den Pins schlieÃŸen
 	public void close() {
 		pinleft.setState(false);
 		pinright.setState(false);

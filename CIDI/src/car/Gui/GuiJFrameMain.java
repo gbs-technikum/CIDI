@@ -1,6 +1,7 @@
 package car.Gui;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Container;
 import java.awt.Font;
 
@@ -28,12 +29,13 @@ public class GuiJFrameMain extends JFrame{
 	
 	public GuiJFrameMain(){
     	this.setTitle("Connect it Drive it!");
-//    	this.setSize(500,500);
+//    	this.setSize(800,550);
     	this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);   
     	this.setLocation(200, 200);
 		initComponent();
 		initEvents();
 		this.pack();
+//		this.setResizable(false);
 		this.setVisible(true);
 	}
 
@@ -75,7 +77,7 @@ public class GuiJFrameMain extends JFrame{
 	}	
 
 	//Zum schalten des JPanels zwischen den "ProgrammOberflächen"
-	public void jpNeuZeichnen(String oberFlaeche, DAO db){
+	public void jpNeuZeichnen(String oberFlaeche, DAO db, Canvas cInput){
 		switch (oberFlaeche) {
 		case "ZurLoginOberflaeche":
 			gjl = new GuiJPLogin(this);
@@ -84,16 +86,17 @@ public class GuiJFrameMain extends JFrame{
 			c.add(gjl, BorderLayout.CENTER);
 			repaint();
 			setVisible(true);
-			this.pack();
+			this.setSize(650, 438);
+//			this.setResizable(false);
 			break;
 		case "ZurDriveOberflaeche":
-			gjd = new GuiJPDrive(this, db);
+			gjd = new GuiJPDrive(this, db, cInput);
 			c.removeAll();
 			standardJFrameBauen();
 			c.add(gjd, BorderLayout.CENTER);
 			repaint();
 			setVisible(true);
-			this.pack();
+			this.setSize(800, 600);
 			break;
 		case "ZurStartOberflaeche":
 			gjs = new GuiJPStart(this);
