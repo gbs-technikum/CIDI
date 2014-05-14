@@ -72,11 +72,15 @@ public class GuiJPDrive extends JPanel{
 		cbRechts.getButton().addActionListener(gdea);
 		jbVerbindungBeenden.addActionListener(gdea);
 		
-		//GuiDriveEventMouse - Breich		
+		//GuiDriveEventMouse - Breich	
+		
+		cbFernlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbFernlicht, guiMain));
+		cbAbblendlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbAbblendlicht, guiMain));
 		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts, guiMain));
 		cbLinks.getButton().addMouseListener(new GuiDriveEventMouse(cbLinks, guiMain));
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
 		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts, guiMain));
+		
 		
 		
 		//GuiDriveEventKeySteuerung - Bereich 
