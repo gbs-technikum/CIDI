@@ -248,8 +248,5 @@ public class DAO {
 //		System.out.println(d.getMaxWarteZeitsek());
 			d.abmelden();
 			
-	}
-
-
-	
+	}	
 }

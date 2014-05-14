@@ -190,9 +190,9 @@ public class GuiJPLogin extends JPanel{
 	    
 	    //CANVAS für STREAM************************
 	    cStreambereich = new Canvas();
-//	    cStreambereich.setSize(300, 200);
-//	    cStreambereich.setBackground(Color.RED);
-	    Player.startPlayer(cStreambereich);
+	    cStreambereich.setSize(300, 200);
+	    cStreambereich.setBackground(Color.RED);
+//	    Player.startPlayer(cStreambereich);
 	    //******************************************
 	    
 	    JPanel jpWarteZeit = new JPanel();

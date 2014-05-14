@@ -102,7 +102,8 @@ public class GuiJPDrive extends JPanel{
         
         //Stream von Webcam
         cStreambereich = new Canvas();
-        Player.startPlayer(cStreambereich);
+        cStreambereich.setBackground(Color.GREEN);
+//        Player.startPlayer(cStreambereich);
         
         //BewegungsTasten
         JPanel jpBewegungsTasten = fSteuertasten();
