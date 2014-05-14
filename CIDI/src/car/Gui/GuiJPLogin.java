@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,8 +42,8 @@ public class GuiJPLogin extends JPanel{
 
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
-		this.datenbank = new DAO();
-		this.datenbank.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		this.datenbank = guiMain.getDatenbank();
+
 		
     	initComponents();
     	initEvents();
@@ -133,7 +134,7 @@ public class GuiJPLogin extends JPanel{
 		 ActionListener taskPerformer = new ActionListener() {
 			 public void actionPerformed(ActionEvent evt) {
 		   	  	System.out.println("Timer B in actionperformer");
-	        	  jlWarteZeit.setText("Sitzung ist Frei!");
+	        	  jlWarteZeit.setText("Sitzung ist frei!");
 		         
 		    	  wartezeitSek--;
 		    	  if(wartezeitSek<0){
@@ -317,11 +318,5 @@ public class GuiJPLogin extends JPanel{
 	public Timer getMyTimer(){
 		return this.myTimer;
 	}
-	
-	public DAO getDatenbank() {
-		return this.datenbank;
-	}
-
-
 	
 }

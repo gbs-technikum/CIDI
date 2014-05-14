@@ -11,13 +11,22 @@
 package car.Events;
 
 import static java.awt.Frame.NORMAL;
+
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
 import javax.swing.JOptionPane;
 
+import car.Hilfsklassen.DAO;
 
 public class GuiDriveWindowEvent implements WindowListener{
 
+	private DAO db;
+	
+	public GuiDriveWindowEvent(DAO db){
+		this.db = db;
+	}
+	
     @Override
     public void windowOpened(WindowEvent e) {
 
@@ -26,8 +35,14 @@ public class GuiDriveWindowEvent implements WindowListener{
     @Override
     public void windowClosing(WindowEvent e) {
         int result = JOptionPane.showConfirmDialog(null, "Wollen Sie das Programm wirklich beenden?","Programm beenden?", JOptionPane.YES_NO_OPTION);
-	if(result==JOptionPane.YES_OPTION)
+	if(result==JOptionPane.YES_OPTION){
+		System.out.println("window Event");
+		if(!this.db.abmelden()){
+			System.out.println("window event - wAbrechen");
+			this.db.wartenAbbrechen();
+		}
 		System.exit(NORMAL);
+		}
     }
 
     @Override

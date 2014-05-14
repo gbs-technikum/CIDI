@@ -55,7 +55,7 @@ public class GuiDriveEventAction implements ActionListener{
 			//Felder löschen //dabenbank angelegtes zeuch löschen
 			System.out.println("abbrechen");
 			this.guiLogin.felderLoeschen();
-			this.guiLogin.getDatenbank().wartenAbbrechen();
+			this.guiMain.getDatenbank().wartenAbbrechen();
 			break;
 		
 		case "Anmelden":
@@ -63,8 +63,8 @@ public class GuiDriveEventAction implements ActionListener{
 			System.out.println("in Actionlistener");
 			if(this.guiLogin.checkLoginDaten()){
 				System.out.println("Anmeldendaten korrekt -> AL   -> prüfe ob Zeit 0 ist");
-				System.out.println(this.guiLogin.getDatenbank().getMaxWarteZeitsek());
-				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == -1 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
+				System.out.println(this.guiMain.getDatenbank().getMaxWarteZeitsek());
+				if(this.guiMain.getDatenbank().getMaxWarteZeitsek() == -1 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
 					System.out.println("-> BeginnGuiDrive -> Steuerung");
 					this.guiLogin.getMyTimer().stop();
 					this.guiLogin.goToDrive();
