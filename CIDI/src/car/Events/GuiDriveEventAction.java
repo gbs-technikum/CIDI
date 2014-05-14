@@ -62,9 +62,9 @@ public class GuiDriveEventAction implements ActionListener{
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			System.out.println("in Actionlistener");
 			if(this.guiLogin.checkLoginDaten()){
-				System.out.println("Anmelden korrekt -> AL");
+				System.out.println("Anmeldendaten korrekt -> AL   -> prüfe ob Zeit 0 ist");
 				System.out.println(this.guiLogin.getDatenbank().getMaxWarteZeitsek());
-				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == 900 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
+				if(this.guiLogin.getDatenbank().getMaxWarteZeitsek() == -1 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
 					System.out.println("-> BeginnGuiDrive -> Steuerung");
 					this.guiLogin.getMyTimer().stop();
 					this.guiLogin.goToDrive();
@@ -100,13 +100,13 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Fernlicht schalten":
 			System.out.println("Fernlicht schalten");
 			guiDrive.getFernlichtButton().pinTogglen();
-			guiMain.requestFocus();
+//			guiMain.requestFocus();     -> Test .. falls nichts geht wieder einkommentieren
 			break;
 			
 		case "Abblendlicht schalten":
 			System.out.println("Abblendlicht schalten");
 			guiDrive.getAbblendlichtButton().pinTogglen();
-			guiMain.requestFocus();
+//			guiMain.requestFocus();  -> Test .. falls nichts geht wieder einkommentieren
 			break;   
 		
 		default:
