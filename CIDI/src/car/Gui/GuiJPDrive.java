@@ -46,7 +46,9 @@ public class GuiJPDrive extends JPanel{
 //    	this.cStreambereich.setSize(300, 200);
 //    	this.cStreambereich.setBackground(Color.RED);
 //    	this.cStreambereich = cStreambereich;
+    	
     	c=Controller.getInstance();
+    	
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
 		this.datenbank = db;

@@ -39,11 +39,17 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 				this.guiDrive.getRechts().bildSchaltenAn();
 				break;
 			case KeyEvent.VK_F:
-				c_VK_F=true;
+				if(c_VK_F==true) {
+					c_VK_F=false;
+				} else
+					c_VK_F=true;
 				this.guiDrive.getFernlichtButton().pinTogglen();  //Fernlicht an/aus
 				break;
 			case KeyEvent.VK_A:
-				c_VK_A=true;
+				if(c_VK_A==true) {
+					c_VK_A=false;
+				}else
+					c_VK_A=true;
 				this.guiDrive.getAbblendlichtButton().pinTogglen();  //Abblendlicht an/aus
 				break;
 		}
