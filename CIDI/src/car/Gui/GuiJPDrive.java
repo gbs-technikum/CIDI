@@ -22,6 +22,7 @@ import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
+import car.Hilfsklassen.Controller;
 import car.Hilfsklassen.DAO;
 import car.Hilfsklassen.Player;
 
@@ -39,12 +40,13 @@ public class GuiJPDrive extends JPanel{
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
-	
+	private Controller c;
     public GuiJPDrive(GuiJFrameMain guiMain, DAO db, Canvas cStreambereich){
 //    	this.cStreambereich = new Canvas();
 //    	this.cStreambereich.setSize(300, 200);
 //    	this.cStreambereich.setBackground(Color.RED);
 //    	this.cStreambereich = cStreambereich;
+    	c=Controller.getInstance();
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
 		this.datenbank = db;
@@ -198,6 +200,7 @@ public class GuiJPDrive extends JPanel{
 	
 	public void goToLogin() {
 		this.datenbank.abmelden();
+		c.close();
 		// Stream etc beenden
 		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null, null);
 	}
