@@ -249,28 +249,28 @@ public class GuiJPDrive extends JPanel{
 	
 	private void initBilder() {
 	    iiObenArray = new ImageIcon[2];
-	    iiObenArray[0] = new ImageIcon(getClass().getResource("src/buttons/oben_inaktiv.png"));
-	    iiObenArray[1] = new ImageIcon(getClass().getResource("src/buttons/oben_aktiv.png"));
+	    iiObenArray[0] = new ImageIcon(getClass().getResource("/buttons/oben_inaktiv.png"));
+	    iiObenArray[1] = new ImageIcon(getClass().getResource("/buttons/oben_aktiv.png"));
 	    
 	    iiUntenArray = new ImageIcon[2];
-	    iiUntenArray[0] = new ImageIcon(getClass().getResource("src/buttons/unten_inaktiv.png"));
-	    iiUntenArray[1] = new ImageIcon(getClass().getResource("src/buttons/unten_aktiv.png"));
+	    iiUntenArray[0] = new ImageIcon(getClass().getResource("/buttons/unten_inaktiv.png"));
+	    iiUntenArray[1] = new ImageIcon(getClass().getResource("/buttons/unten_aktiv.png"));
 	    
 	    iiLinksArray = new ImageIcon[2];
-	    iiLinksArray[0] = new ImageIcon(getClass().getResource("src/buttons/links_inaktiv.png"));
-	    iiLinksArray[1] = new ImageIcon(getClass().getResource("src/buttons/links_aktiv.png"));
+	    iiLinksArray[0] = new ImageIcon(getClass().getResource("/buttons/links_inaktiv.png"));
+	    iiLinksArray[1] = new ImageIcon(getClass().getResource("/buttons/links_aktiv.png"));
 	    
 	    iiRechtsArray = new ImageIcon[2];
-	    iiRechtsArray[0] = new ImageIcon(getClass().getResource("src/buttons/rechts_inaktiv.png"));
-	    iiRechtsArray[1] = new ImageIcon(getClass().getResource("src/buttons/rechts_aktiv.png"));
+	    iiRechtsArray[0] = new ImageIcon(getClass().getResource("/buttons/rechts_inaktiv.png"));
+	    iiRechtsArray[1] = new ImageIcon(getClass().getResource("/buttons/rechts_aktiv.png"));
 	    
 	    iiFernlichtArray = new ImageIcon[2];
-	    iiFernlichtArray[0] = new ImageIcon(getClass().getResource("src/buttons/fernlicht_inaktiv.png"));
-	    iiFernlichtArray[1] = new ImageIcon(getClass().getResource("src/buttons/fernlicht_aktiv.png"));
+	    iiFernlichtArray[0] = new ImageIcon(getClass().getResource("/buttons/fernlicht_inaktiv.png"));
+	    iiFernlichtArray[1] = new ImageIcon(getClass().getResource("/buttons/fernlicht_aktiv.png"));
 	    
 	    iiAbblendlichtArray = new ImageIcon[2];
-	    iiAbblendlichtArray[0] = new ImageIcon(getClass().getResource("src/buttons/abblendlicht_inaktiv.png"));
-	    iiAbblendlichtArray[1] = new ImageIcon(getClass().getResource("src/buttons/abblendlicht_aktiv.png"));
+	    iiAbblendlichtArray[0] = new ImageIcon(getClass().getResource("/buttons/abblendlicht_inaktiv.png"));
+	    iiAbblendlichtArray[1] = new ImageIcon(getClass().getResource("/buttons/abblendlicht_aktiv.png"));
 	}
 	
 	/////////////////Setzte Zeit zum Fahren ////////////////////////
@@ -303,7 +303,6 @@ public class GuiJPDrive extends JPanel{
 	
 	public CIDIButton getRechts(){
 		return this.cbRechts;
-	}
-	
+	}	
 }
 
