@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,8 +42,8 @@ public class GuiJPLogin extends JPanel{
 
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
-		this.datenbank = new DAO();
-		this.datenbank.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		this.datenbank = guiMain.getDatenbank();
+
 		
     	initComponents();
     	initEvents();
@@ -97,8 +98,10 @@ public class GuiJPLogin extends JPanel{
 		   	  	System.out.println("Timer A in actionperformer: " + wartezeitMin + " " + wartezeitSek);
 		         
 		         if(wartezeitMin==0 && wartezeitSek==0 || wartezeitMin==-666){
+		        	 wartezeitSek = 0; 
 		        	  System.out.println("Zum prüfen der logindaten");
-		        	  jlWarteZeit.setText("Sitzung Frei!");
+		        	  myTimer.stop();
+		        	  startTimer();
 		        	  if(checkLoginDaten()){
 			       		  System.out.println("logindaten korrekt -> in ZeitMethode -> ab zum Steuern");
 			       		  myTimer.stop();
@@ -131,6 +134,7 @@ public class GuiJPLogin extends JPanel{
 		 ActionListener taskPerformer = new ActionListener() {
 			 public void actionPerformed(ActionEvent evt) {
 		   	  	System.out.println("Timer B in actionperformer");
+	        	  jlWarteZeit.setText("Sitzung ist frei!");
 		         
 		    	  wartezeitSek--;
 		    	  if(wartezeitSek<0){
@@ -280,8 +284,8 @@ public class GuiJPLogin extends JPanel{
 		
 			if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
 				jbanmelden.setEnabled(false);
-				jtuser.setEditable(false);
-				jpassword.setEditable(false);
+//				jtuser.setEditable(false);
+//				jpassword.setEditable(false);
 				return true;
 			} else {
 				JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
@@ -305,21 +309,14 @@ public class GuiJPLogin extends JPanel{
 	public void felderLoeschen() {
 		jtuser.setText("");
 		jtuser.setEnabled(true);
+		jtuser.requestFocus();
 		jpassword.setText("");
 		jpassword.setEnabled(true);
-		jtuser.requestFocus();
-		jtuser.setEnabled(true);
 		jbanmelden.setEnabled(true);
 	}
 
 	public Timer getMyTimer(){
 		return this.myTimer;
 	}
-	
-	public DAO getDatenbank() {
-		return this.datenbank;
-	}
-
-
 	
 }

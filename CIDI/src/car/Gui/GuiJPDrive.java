@@ -1,5 +1,6 @@
 package car.Gui;
 
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -23,7 +24,6 @@ import car.Events.GuiDriveEventKeySteuerung;
 import car.Events.GuiDriveEventMouse;
 import car.Hilfsklassen.CIDIButton;
 import car.Hilfsklassen.DAO;
-import car.Hilfsklassen.Player;
 
 public class GuiJPDrive extends JPanel{
 	
@@ -79,7 +79,7 @@ public class GuiJPDrive extends JPanel{
 		GuiDriveEventKeySteuerung gdeks = new GuiDriveEventKeySteuerung(this);
 		guiMain.addKeyListener(gdeks);
 		guiMain.requestFocus();
-						
+
 	}
 
 	private void initComponents() {
@@ -102,7 +102,7 @@ public class GuiJPDrive extends JPanel{
         
         //Stream von Webcam
         cStreambereich = new Canvas();
-        Player.startPlayer(cStreambereich);
+//        Player.startPlayer(cStreambereich);
         
         //BewegungsTasten
         JPanel jpBewegungsTasten = fSteuertasten();

@@ -19,19 +19,21 @@ public class GuiJFrameMain extends JFrame{
 
 	private Container c;
 	private JPanel jpNorth, jpSouth;
-	
+	private DAO db;
 	private GuiJPDrive gjd;
 	private GuiJPStart gjs;
 	private GuiJPLogin gjl;
 	
-	private GuiDriveEventAction gdea;
-	private GuiDriveWindowEvent gdew;
 	
 	public GuiJFrameMain(){
     	this.setTitle("Connect it Drive it!");
 //    	this.setSize(800,550);
     	this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);   
     	this.setLocation(200, 200);
+    	
+    	db = new DAO();
+		this.db.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+    	
 		initComponent();
 		initEvents();
 		this.pack();
@@ -62,18 +64,14 @@ public class GuiJFrameMain extends JFrame{
 	
 //****************************************************************
 	private void dynamischerTeil() {
-//		gjs = new GuiJPStart(this);
-//		gjl = new GuiJPLogin(this);
-//		gjd = new GuiJPDrive(this);
 		c.add(new GuiJPStart(this), BorderLayout.CENTER);
 	}
 //****************************************************************
 	
 	private void initEvents() {
-		gdew = new GuiDriveWindowEvent();
-		gdea = new GuiDriveEventAction(this);
+		new GuiDriveEventAction(this);
 
-		this.addWindowListener(gdew);
+		this.addWindowListener(new GuiDriveWindowEvent(this.db));
 	}	
 
 	//Zum schalten des JPanels zwischen den "ProgrammOberflächen"
@@ -132,6 +130,7 @@ public class GuiJFrameMain extends JFrame{
 		GuiJFrameMain g = new GuiJFrameMain();
 	}
 
-
-	
+	public DAO getDatenbank() {
+		return this.db;
+	}
 }
