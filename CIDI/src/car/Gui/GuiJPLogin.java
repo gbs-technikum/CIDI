@@ -129,7 +129,6 @@ public class GuiJPLogin extends JPanel{
 		    	  if(wartezeitSek<0){
 		    		  wartezeitSek=60;
 			   	  }
-			    	  
 		          //Prüft alle 5 sekunden ob sich die WarteZeit verändert hat
 		          if(wartezeitSek%5 == 0){
 		        	  getTimesql();
@@ -177,7 +176,7 @@ public class GuiJPLogin extends JPanel{
 	    jpText.add(jlStreamText);
 	    jpText.setBorder(new CompoundBorder(jpText.getBorder(), lbKastl));
 	    
-	    //CANVAS für STREAM************************
+	    //CANVAS für STREAM
 	    cStreambereich = new Canvas();
 	    cStreambereich.setSize(300, 200);
 	    cStreambereich.setBackground(Color.GREEN);
@@ -245,7 +244,6 @@ public class GuiJPLogin extends JPanel{
 			return true;
 		return false;
 	}
-    
 
 	public boolean checkLogin() {
 		if(isEmpty((JTextField) jtuser)) {
@@ -254,7 +252,6 @@ public class GuiJPLogin extends JPanel{
 			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
 				return true;
-//			}
 		}
 		return false;
 	}

@@ -30,9 +30,7 @@ public class GuiDriveWindowEvent extends WindowAdapter{
     public void windowClosing(WindowEvent e) {
         int result = JOptionPane.showConfirmDialog(null, "Wollen Sie das Programm wirklich beenden?","Programm beenden?", JOptionPane.YES_NO_OPTION);
 	if(result==JOptionPane.YES_OPTION){
-		System.out.println("window Event");
 		if(!this.db.abmelden()){
-			System.out.println("window event - wAbrechen");
 			this.db.wartenAbbrechen();
 		}
 		this.db.verbindungAbbauen();

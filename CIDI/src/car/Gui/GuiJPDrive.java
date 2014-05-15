@@ -1,6 +1,5 @@
 package car.Gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -50,7 +49,6 @@ public class GuiJPDrive extends JPanel{
 //    	this.cStreambereich = cStreambereich;
 
 //    	c=Controller.getInstance();
-
     	
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
@@ -197,7 +195,6 @@ public class GuiJPDrive extends JPanel{
 		      }
 		  };
 		  new Timer(delay, taskPerformer).start();
-		  
 	}
 	
 	public void goToLogin() {
@@ -281,7 +278,7 @@ public class GuiJPDrive extends JPanel{
 	    iiAbblendlichtArray[1] = new ImageIcon(getClass().getResource("/buttons/abblendlicht_aktiv.png"));
 	}
 	
-	/////////////////Setzte Zeit zum Fahren ////////////////////////
+	//Setzte Zeit zum Fahren 
 	private void zeitSetzen(){
        	this.wartezeitSek=59;
        	this.wartezeitMin=14; 

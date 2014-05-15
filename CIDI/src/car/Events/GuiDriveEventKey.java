@@ -1,11 +1,12 @@
 package car.Events;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import car.Gui.GuiJPLogin;
 
-public class GuiDriveEventKey implements KeyListener {
+public class GuiDriveEventKey extends KeyAdapter {
 
 	private GuiJPLogin gjl;
 	
@@ -16,12 +17,6 @@ public class GuiDriveEventKey implements KeyListener {
 	public GuiDriveEventKey() {
 	}
 	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
@@ -43,9 +38,5 @@ public class GuiDriveEventKey implements KeyListener {
 		} 
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-	
-	}
 }
 

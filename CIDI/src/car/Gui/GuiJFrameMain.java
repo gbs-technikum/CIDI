@@ -85,7 +85,6 @@ public class GuiJFrameMain extends JFrame{
 			repaint();
 			setVisible(true);
 			this.setSize(650, 438);
-//			this.setResizable(false);
 			break;
 		case "ZurDriveOberflaeche":
 			gjd = new GuiJPDrive(this, db, cInput);

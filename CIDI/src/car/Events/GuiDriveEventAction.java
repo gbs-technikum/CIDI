@@ -39,11 +39,8 @@ public class GuiDriveEventAction implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		String event = e.getActionCommand();
-		
-//		System.out.println(event);
-//		System.out.println(e);
 		
 		switch (event) {
 		case "ZumLogin":
@@ -70,7 +67,7 @@ public class GuiDriveEventAction implements ActionListener{
 			this.guiDrive.goToLogin();
 			break;
 			
-		case "Zum Webshop":
+		case "Zum Webshop": //Gibt es noch nicht
 			//Start internet Explorer -> Amazon oder sonst was
 			System.out.println("Ab zum Webshop!");
 			break;
@@ -94,13 +91,11 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Fernlicht schalten":
 			System.out.println("Fernlicht schalten");
 			guiDrive.getFernlichtButton().pinTogglen();
-//			guiMain.requestFocus();     -> Test .. falls nichts geht wieder einkommentieren
 			break;
 			
 		case "Abblendlicht schalten":
 			System.out.println("Abblendlicht schalten");
 			guiDrive.getAbblendlichtButton().pinTogglen();
-//			guiMain.requestFocus();  -> Test .. falls nichts geht wieder einkommentieren
 			break;   
 		
 		default:

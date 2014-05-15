@@ -14,7 +14,6 @@ public class Controller {
 			pinrlicht, pinflicht, pinrflicht;
 
 	private Controller() {
-		// TODO Auto-generated constructor stub
 		gpio = GpioFactory.getInstance();
 
 		// Pins Inizialisieren

@@ -12,7 +12,6 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 //	private Controller c;
 	private boolean c_VK_UP,c_VK_DOWN,c_VK_LEFT,c_VK_RIGHT,c_VK_F,c_VK_A;
 	
-	
 	public GuiDriveEventKeySteuerung(GuiJPDrive guiD)  {
 		this.guiDrive = guiD;
 //		c = Controller.getInstance();
