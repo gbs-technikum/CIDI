@@ -28,16 +28,20 @@ public class GuiDriveEventMouse extends MouseAdapter{
 		case "Abblendlicht schalten":
 			if(c_VK_A==true) {
 				c_VK_A=false;
-			} else
+				this.cb.bildSchaltenAus();
+			} else {
 				c_VK_A=true;
-			cb.pinTogglen();
+				this.cb.bildSchaltenAn();
+			}
 			break;
 		case "Fernlicht schalten":
 			if(c_VK_F==true) {
 				c_VK_F=false;
-			} else
+				this.cb.bildSchaltenAus();
+			} else {
 				c_VK_F=true;
-			cb.pinTogglen();
+				this.cb.bildSchaltenAn();
+			}
 			break;
 		}
 //		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);

@@ -26,11 +26,9 @@ public class CIDIButton {
 	
 	public void pinTogglen(){
 		if(!this.pinStatus){
-			System.out.println("An " + jbButton.getActionCommand());
 			this.jbButton.setIcon(this.iiBilder[1]);
 			this.pinStatus = true;
 		} else if (this.pinStatus){
-			System.out.println("Aus " + jbButton.getActionCommand());
 			this.jbButton.setIcon(this.iiBilder[0]);
 			this.pinStatus = false;
 		}
