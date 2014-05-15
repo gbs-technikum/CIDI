@@ -186,7 +186,7 @@ public class GuiJPLogin extends JPanel{
 	    JLabel jlWartenText = new JLabel("Verbleibende Wartezeit ");
 	    jlWartenText.setBorder(new CompoundBorder(jlWartenText.getBorder(), lbKastl));
 	    jlWarteZeit = new JLabel();
-	    jlWarteZeit.setBorder(new CompoundBorder(jlWarteZeit.getBorder(), lbKastl));
+//	    jlWarteZeit.setBorder(new CompoundBorder(jlWarteZeit.getBorder(), lbKastl));
 	    jpWarteZeit.add(jlWartenText);
 	    jpWarteZeit.add(jlWarteZeit);
 	     
@@ -207,7 +207,7 @@ public class GuiJPLogin extends JPanel{
         JLabel jluser = new JLabel(" Benutzer ");
         jluser.setBorder(new CompoundBorder(jluser.getBorder(), lbKastl));
         jtuser = new JTextField(12);
-        jtuser.setBorder(new CompoundBorder(jluser.getBorder(), lbKastl));
+//        jtuser.setBorder(new CompoundBorder(jluser.getBorder(), lbKastl));
         jpuser.add(jluser);
         jpuser.add(jtuser);
         
@@ -215,7 +215,7 @@ public class GuiJPLogin extends JPanel{
         JLabel jlpassword = new JLabel(" Passwort ");
         jlpassword.setBorder(new CompoundBorder(jlpassword.getBorder(), lbKastl));
         jpassword = new JPasswordField(12);
-        jpassword.setBorder(new CompoundBorder(jpassword.getBorder(), lbKastl));
+//        jpassword.setBorder(new CompoundBorder(jpassword.getBorder(), lbKastl));
         jplpassword.add(jlpassword);
         jplpassword.add(jpassword);      
         

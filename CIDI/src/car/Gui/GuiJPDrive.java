@@ -102,7 +102,7 @@ public class GuiJPDrive extends JPanel{
 	
 	private JPanel fMainPanelLinks() {
 		JPanel jplinks = new JPanel();
-        jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.red,3)));
+//        jplinks.setBorder(new CompoundBorder(jplinks.getBorder(), new LineBorder(Color.RED,3)));
         jplinks.setLayout(new BoxLayout(jplinks, BoxLayout.Y_AXIS));
         
         //Stream von Webcam
@@ -130,7 +130,7 @@ public class GuiJPDrive extends JPanel{
         
         JPanel jpSitzungsInfo = new JPanel();
         jpSitzungsInfo.setLayout(new BoxLayout(jpSitzungsInfo,BoxLayout.Y_AXIS));
-        jpSitzungsInfo.setBorder(new CompoundBorder(jpSitzungsInfo.getBorder(), new LineBorder(Color.gray,3)));
+//        jpSitzungsInfo.setBorder(new CompoundBorder(jpSitzungsInfo.getBorder(), new LineBorder(Color.GRAY,3)));
         JPanel jpTextVerbZeit = new JPanel();
         JLabel jlTextVerbZeit = new JLabel("Verbleibende Zeit:");
         jlTextVerbZeit.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -209,19 +209,19 @@ public class GuiJPDrive extends JPanel{
 	private JPanel fFunktionstasten() {
 		JPanel jpFunktionen = new JPanel();
     	jpFunktionen.setLayout(new BoxLayout(jpFunktionen,BoxLayout.X_AXIS));
-    	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
+//    	jpFunktionen.setBorder(new CompoundBorder(jpFunktionen.getBorder(), new LineBorder(Color.yellow,3)));
     	cbAbblendlicht = new CIDIButton(iiAbblendlichtArray, "Abblendlicht schalten");
     	cbFernlicht = new CIDIButton(iiFernlichtArray, "Fernlicht schalten");
     	
-    	jpFunktionen.add(cbFernlicht.getButton());
     	jpFunktionen.add(cbAbblendlicht.getButton());
+    	jpFunktionen.add(cbFernlicht.getButton());
 		
     	return jpFunktionen;
 	}
 
 	private JPanel fSteuertasten() {
 		JPanel jpBewegungsTasten = new JPanel();
-        jpBewegungsTasten.setBorder(new CompoundBorder(jpBewegungsTasten.getBorder(), new LineBorder(Color.green,3)));
+//        jpBewegungsTasten.setBorder(new CompoundBorder(jpBewegungsTasten.getBorder(), new LineBorder(Color.green,3)));
         GridBagConstraints bgc = new GridBagConstraints();
     	jpBewegungsTasten.setLayout(new GridBagLayout());
        
