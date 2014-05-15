@@ -33,9 +33,13 @@ public class DAO {
 		}
 	}
 	
-	public void verbindungAbbauen() throws SQLException{
+	public void verbindungAbbauen() {
 		if(con != null){
-			con.close();
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			con = null;
 		} else {
 			System.out.println("Problem: verbindungAbbauen()");

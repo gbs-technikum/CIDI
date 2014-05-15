@@ -41,6 +41,7 @@ public class GuiDriveWindowEvent implements WindowListener{
 			System.out.println("window event - wAbrechen");
 			this.db.wartenAbbrechen();
 		}
+		this.db.verbindungAbbauen();
 		System.exit(NORMAL);
 		}
     }
