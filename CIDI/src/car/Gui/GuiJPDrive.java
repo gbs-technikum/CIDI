@@ -37,7 +37,7 @@ public class GuiJPDrive extends JPanel{
     private JLabel jlZahlenVerbZeit, jlNutzerName;
     private DAO datenbank;
     private Canvas cStreambereich;
-//	private Controller c;
+	private Controller c;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
@@ -48,7 +48,7 @@ public class GuiJPDrive extends JPanel{
 //    	this.cStreambereich.setBackground(Color.RED);
 //    	this.cStreambereich = cStreambereich;
 
-//    	c=Controller.getInstance();
+    	c=Controller.getInstance();
     	
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
@@ -200,7 +200,7 @@ public class GuiJPDrive extends JPanel{
 	public void goToLogin() {
 		this.datenbank.abmelden();
 
-//		c.close();
+		c.close();
 		
 		// Stream etc beenden
 		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null, null);

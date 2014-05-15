@@ -9,12 +9,12 @@ import car.Hilfsklassen.Controller;
 public class GuiDriveEventKeySteuerung extends KeyAdapter{
 
 	private GuiJPDrive guiDrive;
-//	private Controller c;
+	private Controller c;
 	private boolean c_VK_UP,c_VK_DOWN,c_VK_LEFT,c_VK_RIGHT,c_VK_F,c_VK_A;
 	
 	public GuiDriveEventKeySteuerung(GuiJPDrive guiD)  {
 		this.guiDrive = guiD;
-//		c = Controller.getInstance();
+		c = Controller.getInstance();
 		c_VK_UP=c_VK_DOWN=c_VK_LEFT=c_VK_RIGHT=c_VK_F=c_VK_A=false;
 	}
 
@@ -56,7 +56,7 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 				this.guiDrive.getAbblendlichtButton().pinTogglen();  //Abblendlicht an/aus
 				break;
 		}
-//		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);
+		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);
 	}
 
 	@Override
@@ -79,6 +79,6 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 				this.guiDrive.getRechts().bildSchaltenAus();
 				break;
 		}
-//		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);
+		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);
 	}
 }
