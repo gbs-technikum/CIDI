@@ -1,5 +1,6 @@
 package car.Events;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -7,7 +8,7 @@ import car.Gui.GuiJFrameMain;
 import car.Hilfsklassen.CIDIButton;
 import car.Hilfsklassen.Controller;
 
-public class GuiDriveEventMouse implements MouseListener{
+public class GuiDriveEventMouse extends MouseAdapter{
 
 	private CIDIButton cb;
 	private GuiJFrameMain guiMain;
@@ -96,15 +97,4 @@ public class GuiDriveEventMouse implements MouseListener{
 //		this.cb.pinTogglen();
 		this.guiMain.requestFocus();
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
 }
