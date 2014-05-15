@@ -54,6 +54,7 @@ public class GuiDriveEventAction implements ActionListener{
 			break;
 		
 		case "Anmelden":
+			this.guiLogin.checkLogin();
 			//Überprüfen in GuiJPLogin ob Daten korrekt sind und sitzung belegt.
 			if(this.guiLogin.checkLoginDaten()){
 				if(this.guiMain.getDatenbank().getMaxWarteZeitsek() == -1 ){		//Zeit ist auch abgelaufen daher situng frei und SCHUBRACKETE
