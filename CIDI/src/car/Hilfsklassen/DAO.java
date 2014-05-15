@@ -27,7 +27,7 @@ public class DAO {
 			pstlogout = con.prepareStatement("UPDATE sitzung SET endeSteuerung=NOW() WHERE id_sitzung=?");
 			pstwarteschlange = con.prepareStatement("SELECT * FROM benutzer WHERE useFlag=true");
 			pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
-			pstlogin = con.prepareStatement("SELECT id FROM benutzer WHERE nutzername=? AND passwort=?");
+			pstlogin = con.prepareStatement("SELECT id FROM benutzer WHERE nutzername=? AND passwort=PASSWORD?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

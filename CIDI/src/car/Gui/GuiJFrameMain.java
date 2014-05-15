@@ -9,6 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
+
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
+
 import car.Events.GuiDriveEventAction;
 import car.Events.GuiDriveWindowEvent;
 import car.Hilfsklassen.DAO;
@@ -126,7 +132,13 @@ public class GuiJFrameMain extends JFrame{
 	
 
 	public static void main(String[] args) {
+		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
+				"/usr/lib");
+		
+		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 		GuiJFrameMain g = new GuiJFrameMain();
+		
+
 	}
 
 	public DAO getDatenbank() {
