@@ -11,11 +11,12 @@ public class DAO {
 	private Connection con;
 	private PreparedStatement pstlogin, psteintragen, pstwarteschlange, pstAnzUserVor, pstlogout, pst, pstgetsitzid;
 	private ResultSet rst;
-	private int idSitzung, idNutzer;
-	private boolean statusWarten;
+	private int idSitzung, idNutzer, IdaktSitz;
 	
 	public DAO() {
 		//DAO d = d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
+		this.idNutzer = -1;
+		this.idSitzung = -1;
 	}
 	
 	public void verbindungAufbauen(String url, String user, String pw){
@@ -32,9 +33,13 @@ public class DAO {
 		}
 	}
 	
-	public void verbindungAbbauen() throws SQLException{
+	public void verbindungAbbauen() {
 		if(con != null){
-			con.close();
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			con = null;
 		} else {
 			System.out.println("Problem: verbindungAbbauen()");
@@ -48,10 +53,6 @@ public class DAO {
 			rst = pstlogin.executeQuery();
 			if( rst.next() ){
 				idNutzer = Integer.parseInt(rst.getString(1)); //geprüft passt
-				rst = pstgetsitzid.executeQuery();
-				if( rst.next()){
-					this.idSitzung = rst.getInt(1)+1;		//abspeichern sitzung in global Variablen
-				} 
 //				
 				switch (warteschlange()) {
 				case "leer":{
@@ -59,16 +60,15 @@ public class DAO {
 					psteintragen.executeUpdate();
 					psteintragen = con.prepareStatement("UPDATE benutzer SET useFlag=true WHERE id=" + this.idNutzer);
 					psteintragen.executeUpdate();
+					setSitzID();
 					rst.close();
-					System.out.println("DAO leer -> anmelden()");
 					return true;
 					}
 				case "anstellen":{
-					System.out.println("in switch -> anstellen");
 					psteintragen = con.prepareStatement("INSERT INTO sitzung (id_benutzer, login) VALUES(" + this.idNutzer + ", NOW())");
 					psteintragen.executeUpdate();
+					setSitzID();
 					rst.close();
-					System.out.println("DAO anstellen -> anmelden()");
 					return true;
 					}
 
@@ -95,115 +95,90 @@ public class DAO {
 		return false;
 	}
 	
+	private void setSitzID() throws SQLException {
+		rst = pstgetsitzid.executeQuery();
+		if( rst.next() ){
+			this.idSitzung = rst.getInt(1);		//abspeichern sitzung in global Variablen
+		}
+	}
+
 	private String warteschlange() throws SQLException {
 		rst = pstwarteschlange.executeQuery();
 		if( rst.next() ){
 			rst.close();
-			this.statusWarten= true;
 			return "anstellen";
 		} 
-		this.statusWarten = false;
 		rst.close();
 		return "leer";
 	}
 
-	public int getMaxWarteZeitsek() {
-		try {
-			pstAnzUserVor = con.prepareStatement("SELECT TIMEDIFF(NOW(), beginnSteuerung) FROM sitzung WHERE beginnSteuerung!='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00'");
-			rst = pstAnzUserVor.executeQuery();
-			int sek = 0;
-			if( rst.next() ){  //Gibt es jemanden Und wenn wie lange darf er noch fahren?
-				String temp = rst.getString(1); //geprüft, geht
-//				System.out.println(temp);  //Zeit von Methode
-				sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
-				//in var sek sind nun wartesekunden in int gespeichert
-				
-				pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE beginnSteuerung='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
-				rst = pstAnzUserVor.executeQuery();
-				int anzSchlange = 0;
-				if(rst.next()){	//Gibt und wie viele sind noch in der Warteschlange
-					anzSchlange = rst.getInt(1);
-					if(this.statusWarten = true){
-						anzSchlange--;
-					}
-					System.out.println("Status warteschlange:  " + statusWarten);
-				} 
-				return (( 900 - sek ) + (anzSchlange * 900));  // (900sek-ZeitbisJetztGefahren) + AnzWartendeUser * 60Sek * 15 min
-			} else {
-				// Es gibt keinen der Fährt, daher return -1
-				return -1;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
+	public boolean abmelden(){
+		if(this.idSitzung != -1) {
 			try {
-				if(rst!=null){
-					rst.close();
+				pst = con.prepareStatement("SELECT * FROM sitzung WHERE beginnSteuerung!='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00' ");
+				rst = pst.executeQuery();
+				if(this.idSitzung == this.IdaktSitz && rst.next()){
+					pstlogout.setInt(1, this.idSitzung);
+					pstlogout.executeUpdate();
+					
+					pstlogout = con.prepareStatement("UPDATE benutzer SET useFlag=false WHERE id=" + this.idNutzer );
+					pstlogout.executeUpdate();
+		
+					//	Sitzung wird frei... chekcen wer in Warteschlange als nächstes kommt und dann gleich buchen !!! -> Ab de lutzi!			
+					bucheNaechsten();
+					return true;
+				} else {
+					return false;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
-		}
-//		System.out.println("-1 zurück keine gefunden");
-		return -1;
-	}
-	
-	public void abmelden(){
-		try {
-			pstlogout.setInt(1, this.idSitzung);
-			pstlogout.executeUpdate();
-			
-			pstlogout = con.prepareStatement("UPDATE benutzer SET useFlag=false WHERE id=" + this.idNutzer );
-			pstlogout.executeUpdate();
-
-			//	Sitzung wird frei... chekcen wer in Warteschlange als nächstes kommt und dann gleich buchen !!! -> Ab de lutzi!			
-			bucheNaechsten(idSitzung);
-			this.idNutzer = -1;
-			this.idSitzung = -1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			this.statusWarten = false;   //Rücksetzten der Variablen für ist in Warteschlange
-			if(rst != null){
-				try {
-					rst.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
+			} finally {
+				if(rst != null){
+					try {
+						rst.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
+		return false;
 	}	
 		
-	private boolean bucheNaechsten(int sitzungsID) throws SQLException {
-		pst = con.prepareStatement("SELECT id_benutzer FROM sitzung WHERE id_sitzung="+ (sitzungsID+1));
+	private boolean bucheNaechsten() throws SQLException {
+		int nextSitzID = getNextSitzungsID();
+		pst = con.prepareStatement("SELECT id_benutzer FROM sitzung WHERE id_sitzung="+ nextSitzID);
 		rst = pst.executeQuery();
 		if (rst.next()){
-			System.out.println("Es steht jemand an, nächster wird eingebucht");
 			pst = con.prepareStatement("UPDATE benutzer SET useFlag=true WHERE id=" + rst.getInt(1) );
 			pst.executeUpdate();
-			pst = con.prepareStatement("UPDATE sitzung SET beginnSteuerung=NOW() WHERE id_sitzung="+ (sitzungsID+1));
+			pst = con.prepareStatement("UPDATE sitzung SET beginnSteuerung=NOW() WHERE id_sitzung="+ nextSitzID);
 			pst.executeUpdate();
 			return true;
 		}
-		System.out.println("Nichts neues wird gebucht da keine Ansteht");
 		return false;
+	}
+
+	private int getNextSitzungsID() throws SQLException {
+		pst = con.prepareStatement("SELECT id_sitzung FROM sitzung WHERE id_sitzung>"+ this.idSitzung +" LIMIT 1");
+		rst = pst.executeQuery();
+		if (rst.next()){
+			return rst.getInt(1);
+		}
+			return -1;	//WEnn s kein nächsten gibt
 	}
 
 	public void wartenAbbrechen(){
 		try {
-			pst = con.prepareStatement("SELECT * FROM sitzung WHERE beginnSteuerung='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00'");
-			rst = pst.executeQuery();
-			if( rst.next() ){
-				System.out.println(this.idSitzung);
+			if( idSitzung != -1 ){
 				pst = con.prepareStatement("DELETE FROM sitzung WHERE id_sitzung=" + this.idSitzung );
 				pst.executeUpdate();
-				pst = con.prepareStatement("UPDATE sitzung SET id_sitzung=id_sitzung-1 WHERE id_sitzung >" + this.idSitzung );
-				pst.executeUpdate();
-			}
+				idSitzung=-1;
+				idNutzer=-1;
+			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			this.statusWarten = false;   //Rücksetzten der Variablen für ist in Warteschlange
 			if(rst != null){
 				try {
 					rst.close();
@@ -236,17 +211,55 @@ public class DAO {
 		return "möp";
 	}
 	
-	public static void main(String[] args) {
-		DAO d = new DAO();
-		d.verbindungAufbauen("jdbc:mysql://localhost:3306/cidi", "root", "mysql");
-		
-//		System.out.println(d.anmelden("becker", "becker"));
-//			System.out.println(d.anmelden("huber", "huber"));
-//			System.out.println(d.anmelden("admin", "admin"));
-//		System.out.println(d.getMaxWarteZeitsek());
-//		System.out.println(d.getMaxWarteZeitsek());
-//		System.out.println(d.getMaxWarteZeitsek());
-			d.abmelden();
-			
-	}	
+	public int getMaxWarteZeitsek() {
+		int anzSchlange = -1, sek = -1;
+		try {
+				pstAnzUserVor = con.prepareStatement("SELECT TIMEDIFF(NOW(), beginnSteuerung), id_Sitzung FROM sitzung WHERE beginnSteuerung!='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00'");
+				rst = pstAnzUserVor.executeQuery();
+				if( rst.next() ){  //Gibt es jemanden der Fährt Und wenn wie lange darf er noch fahren?
+					String temp = rst.getString(1); //Zeit
+					sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
+					//in var sek sind nun wartesekunden in int gespeichert
+					IdaktSitz = rst.getInt(2); //Gibt id der Sitzung der fährt
+					
+					if(idSitzung != -1){ //Wenn ich bereits warte habe ich eine Sitzung ID -> (isSitzung != -1) 
+						if(IdaktSitz == this.idSitzung){
+							return -1;
+						}
+						pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE id_sitzung>" + IdaktSitz +" AND id_sitzung<"+ this.idSitzung);
+						rst = pstAnzUserVor.executeQuery();
+						if( rst.next() ){	 //Wie viele Leute müssen noch vor mir Warten -> faktor * 15
+							anzSchlange = (rst.getInt(1));
+						}else{
+							//if-Anweisung z217 ob es nen faktor*15 gibt
+							return -1;
+						}
+					} else { //Nicht angemeldet maxwartezeit
+						pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE beginnSteuerung='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
+						rst = pstAnzUserVor.executeQuery();
+						if(rst.next()){	//Gibt und wie viele sind noch in der Warteschlange
+							anzSchlange = rst.getInt(1);
+						} else {
+							return 900-sek;
+						}
+					}
+				} else {
+					//Keiner vor ihm
+					return -1;
+				}
+				return (( 900 - sek ) + (anzSchlange * 900));  // (900sek-ZeitbisJetztGefahren) + AnzWartendeUser * 60Sek * 15 min
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rst!=null){
+					rst.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
 }

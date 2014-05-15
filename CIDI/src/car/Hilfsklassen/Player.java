@@ -39,20 +39,17 @@ public class Player {
 		/**
 		 * Pfad der VLC-Libraries laden VLC-Library - Pfad beim Raspberry:
 		 * "/usr/lib"
-		 * 
-		 * Pfad bei Windows:
-		 * "C:\\Program Files\\VideoLAN\\VLC"
-		 */
+		*/
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
-				"/usr/lib");
+				"C:\\Program Files\\VideoLAN\\VLC");
 		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 
 		final Canvas cTest = cInput;
 		
-		final String rtsp = "rtsp://localhost:8554/";
-//		final String rtsp = "D:\\Downloads\\video.mp4";
-//		final String rtsp = rtsp://192.168.15.85:8554/";
-		
+		final String rtsp = "rtsp://192.168.15.85:8554/";
+//		final String video = "D:\\Downloads\\video.mp4";
+//		final String rtsp = url;
+
 		/**
 		 * Starten des Players
 		 */
@@ -63,9 +60,4 @@ public class Player {
 			}
 		});
 	}
-	
-//	public Canvas getCanvasPlayer() {
-//		return this.cStreamFenster;
-//	}
-
 }

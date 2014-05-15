@@ -1,5 +1,6 @@
 package car.Gui;
 
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -37,17 +38,19 @@ public class GuiJPDrive extends JPanel{
     private JLabel jlZahlenVerbZeit, jlNutzerName;
     private DAO datenbank;
     private Canvas cStreambereich;
+//	private Controller c;
     
     private ImageIcon[] iiObenArray, iiUntenArray, iiLinksArray, iiRechtsArray;
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
-	private Controller c;
+
     public GuiJPDrive(GuiJFrameMain guiMain, DAO db, Canvas cStreambereich){
 //    	this.cStreambereich = new Canvas();
 //    	this.cStreambereich.setSize(300, 200);
 //    	this.cStreambereich.setBackground(Color.RED);
 //    	this.cStreambereich = cStreambereich;
-    	
-    	c=Controller.getInstance();
+
+//    	c=Controller.getInstance();
+
     	
     	this.setLayout(new BorderLayout());
 		this.guiMain = guiMain;
@@ -73,7 +76,6 @@ public class GuiJPDrive extends JPanel{
 		jbVerbindungBeenden.addActionListener(gdea);
 		
 		//GuiDriveEventMouse - Breich	
-		
 		cbFernlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbFernlicht, guiMain));
 		cbAbblendlicht.getButton().addMouseListener(new GuiDriveEventMouse(cbAbblendlicht, guiMain));
 		cbVorwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbVorwaerts, guiMain));
@@ -81,13 +83,10 @@ public class GuiJPDrive extends JPanel{
 		cbRueckwaerts.getButton().addMouseListener(new GuiDriveEventMouse(cbRueckwaerts, guiMain));
 		cbRechts.getButton().addMouseListener(new GuiDriveEventMouse(cbRechts, guiMain));
 		
-		
-		
 		//GuiDriveEventKeySteuerung - Bereich 
 		GuiDriveEventKeySteuerung gdeks = new GuiDriveEventKeySteuerung(this);
 		guiMain.addKeyListener(gdeks);
 		guiMain.requestFocus();
-						
 	}
 
 	private void initComponents() {
@@ -111,7 +110,7 @@ public class GuiJPDrive extends JPanel{
         //Stream von Webcam
         cStreambereich = new Canvas();
         cStreambereich.setBackground(Color.GREEN);
-//        Player.startPlayer(cStreambereich);
+//      Player.startPlayer(cStreambereich);
         
         //BewegungsTasten
         JPanel jpBewegungsTasten = fSteuertasten();
@@ -148,7 +147,6 @@ public class GuiJPDrive extends JPanel{
         setjlNutzername();
         jpNutzerName.add(this.jlNutzerName);
         
-        
         jpSitzungsInfo.add(jpTextVerbZeit);
         jpSitzungsInfo.add(jpZahlenVerbZeit);
         jpSitzungsInfo.add(jpNutzerName);
@@ -169,7 +167,6 @@ public class GuiJPDrive extends JPanel{
 
 	private void countDownZaehler() {
 		this.zeitSetzen();
-		System.out.println("in Countdown");
 		
 		int delay = 1000; //milliseconds
 		  ActionListener taskPerformer = new ActionListener() {
@@ -196,7 +193,6 @@ public class GuiJPDrive extends JPanel{
 		        		  wartezeitMin=14;
 		        		  wartezeitSek=59;
 		        	  }
-		        	  //-> JEde sekund hier
 		          }
 		      }
 		  };
@@ -206,7 +202,9 @@ public class GuiJPDrive extends JPanel{
 	
 	public void goToLogin() {
 		this.datenbank.abmelden();
-		c.close();
+
+//		c.close();
+		
 		// Stream etc beenden
 		guiMain.jpNeuZeichnen("ZurLoginOberflaeche", null, null);
 	}
@@ -288,8 +286,6 @@ public class GuiJPDrive extends JPanel{
        	this.wartezeitSek=59;
        	this.wartezeitMin=14; 
 	}
-	////////////////////////////////////////////////////////////////
-	
 	
 	public CIDIButton getFernlichtButton(){
 		return this.cbFernlicht;

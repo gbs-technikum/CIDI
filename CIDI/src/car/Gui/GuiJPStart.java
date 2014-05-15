@@ -9,32 +9,30 @@ import javax.swing.JPanel;
 
 import car.Events.GuiDriveEventAction;
 
-public class GuiJPStart extends JPanel{
+public class GuiJPStart extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JButton jbZurAnmeldung;
 	private GuiDriveEventAction gdea;
-	
+
 	private GuiJFrameMain guiMain;
-	
-	public GuiJPStart(GuiJFrameMain guiMain){
+
+	public GuiJPStart(GuiJFrameMain guiMain) {
 		this.guiMain = guiMain;
 		initComponents();
 		initEvents();
 	}
 
 	private void initEvents() {
-		gdea = new GuiDriveEventAction(guiMain);	
-		jbZurAnmeldung.addActionListener(gdea);		
+		gdea = new GuiDriveEventAction(guiMain);
+		jbZurAnmeldung.addActionListener(gdea);
 	}
 
 	private void initComponents() {
 		this.setLayout(new BorderLayout());
-		
 		JLabel jlbild = new JLabel(new ImageIcon(getClass().getResource("/bilder/start.jpg")));
-//		JLabel jlbild = new JLabel(new ImageIcon("src/bilder/start.jpg"));
-    	
 		JPanel jpMittig = new JPanel();
+
     	jbZurAnmeldung = new JButton("Weiter zur Anmeldung!");
     	jbZurAnmeldung.setActionCommand("ZumLogin");
     	jpMittig.add(jbZurAnmeldung);  	
