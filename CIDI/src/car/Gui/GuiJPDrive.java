@@ -43,10 +43,10 @@ public class GuiJPDrive extends JPanel{
     private ImageIcon[] iiFernlichtArray, iiAbblendlichtArray;
 
     public GuiJPDrive(GuiJFrameMain guiMain, DAO db, Canvas cStreambereich){
-//    	this.cStreambereich = new Canvas();
+    	this.cStreambereich = new Canvas();
 //    	this.cStreambereich.setSize(300, 200);
 //    	this.cStreambereich.setBackground(Color.RED);
-//    	this.cStreambereich = cStreambereich;
+    	this.cStreambereich = cStreambereich;
 
     	c=Controller.getInstance();
     	

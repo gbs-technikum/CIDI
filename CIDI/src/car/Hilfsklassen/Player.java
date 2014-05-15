@@ -37,18 +37,23 @@ public class Player {
 
 	public static void startPlayer(Canvas cInput){
 		/**
-		 * Pfad der VLC-Libraries laden VLC-Library - Pfad beim Raspberry:
-		 * "/usr/lib"
+		 * Pfad der VLC-Libraries in Windows
 		*/
+//		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
+//				"C:\\Program Files\\VideoLAN\\VLC");
+		
+		/**
+		 * Pfad der VLC-Libraries auf RPi
+		 */	
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
-				"C:\\Program Files\\VideoLAN\\VLC");
+				"/usr/lib");
+		
 		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 
 		final Canvas cTest = cInput;
 		
-		final String rtsp = "rtsp://192.168.15.85:8554/";
-//		final String video = "D:\\Downloads\\video.mp4";
-//		final String rtsp = url;
+		final String rtsp = "rtsp://localhost:8554/";
+//		final String rtsp = "D:\\Downloads\\video.mp4";
 
 		/**
 		 * Starten des Players
