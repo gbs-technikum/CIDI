@@ -264,9 +264,8 @@ public class GuiJPLogin extends JPanel{
 		
 			if(datenbank.anmelden(this.jtuser.getText(), tempPW)){
 				jbanmelden.setEnabled(false);
-//TODO: Felder werden setEditabel(false) wenn -> warteschlange
-//				jtuser.setEditable(false);
-//				jpassword.setEditable(false);
+				jtuser.setEditable(false);
+				jpassword.setEditable(false);
 
 				return true;
 			} else {
@@ -290,10 +289,10 @@ public class GuiJPLogin extends JPanel{
 
 	public void felderLoeschen() {
 		jtuser.setText("");
-		jtuser.setEnabled(true);
+		jtuser.setEditable(true);
 		jtuser.requestFocus();
 		jpassword.setText("");
-		jpassword.setEnabled(true);
+		jpassword.setEditable(true);
 		jbanmelden.setEnabled(true);
 	}
 
