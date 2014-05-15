@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/I3A-Huber/SOP/Git/mysql-connector-java-5.1.29-bin.jar"/>
 	<classpathentry kind="lib" path="build/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="lib/jna-3.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
@@ -27,5 +26,6 @@
 	<classpathentry kind="lib" path="lib/vlcj-3.0.1-test-sources.jar"/>
 	<classpathentry kind="lib" path="lib/vlcj-3.0.1-tests.jar"/>
 	<classpathentry kind="lib" path="lib/vlcj-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.29-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
