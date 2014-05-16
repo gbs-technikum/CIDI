@@ -24,22 +24,18 @@ public class GuiDriveEventKeySteuerung extends KeyAdapter{
 			case KeyEvent.VK_UP:
 				c_VK_UP=true;
 				this.guiDrive.getVorwarets().bildSchaltenAn(); //Vorw�rtsknopschalten
-				System.out.println("Vorwärts schalten k");
 				break;
 			case KeyEvent.VK_DOWN:
 				c_VK_DOWN=true;
 				this.guiDrive.getRueckwaerts().bildSchaltenAn();
-				System.out.println("Rückwärts schalten k");
 				break;
 			case KeyEvent.VK_LEFT:
 				c_VK_LEFT=true;
 				this.guiDrive.getLinks().bildSchaltenAn();
-				System.out.println("Links schalten k");
 				break;
 			case KeyEvent.VK_RIGHT:
 				c_VK_RIGHT=true;
 				this.guiDrive.getRechts().bildSchaltenAn();
-				System.out.println("Rechts schalten k");
 				break;
 			case KeyEvent.VK_F:
 				if(c_VK_F==true) {

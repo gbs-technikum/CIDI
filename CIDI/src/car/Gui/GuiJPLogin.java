@@ -178,7 +178,7 @@ public class GuiJPLogin extends JPanel{
 	    
 	    //CANVAS für STREAM
 	    cStreambereich = new Canvas();
-//	    cStreambereich.setSize(300, 200);
+	    cStreambereich.setSize(300, 200);
 //	    cStreambereich.setBackground(Color.GREEN);
 //	    Player.startPlayer(cStreambereich);
 	    
@@ -247,9 +247,9 @@ public class GuiJPLogin extends JPanel{
 
 	public boolean checkLogin() {
 		if(isEmpty((JTextField) jtuser)) {
-			JOptionPane.showMessageDialog(null, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(this, "Bitte Alle Felder ausüllen!","Fehler", JOptionPane.OK_OPTION);
 		} else if(isEmpty((JTextField) jpassword)) {
-			JOptionPane.showMessageDialog(null, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(this, "Bitte Passwort eingben!","Fehler", JOptionPane.OK_OPTION);
 		} else {
 				return true;
 		}
@@ -269,7 +269,7 @@ public class GuiJPLogin extends JPanel{
 
 				return true;
 			} else {
-				JOptionPane.showMessageDialog(null, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(this, "Die angegbene Daten sind Falsch! Bitte noch einmal Versuchen.","Fehler", JOptionPane.OK_OPTION);
 				return false;
 			}
 		}

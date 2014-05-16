@@ -43,9 +43,7 @@ public class DAO {
 				e.printStackTrace();
 			}
 			con = null;
-		} else {
-			System.out.println("Problem: verbindungAbbauen()");
-		}
+		} 
 	}
 	
 	public Boolean anmelden(String benutzername, String pw) {
@@ -73,12 +71,10 @@ public class DAO {
 					return true;
 					}
 				default:{
-					System.out.println("Problem: rückgabewert Warteschlange()!");
 					rst.close();
 					}
 				}
 			} else {
-				System.out.println("Logindaten nicht gefunden! anmelden()");
 				return false;
 			}
 		} catch (SQLException e) {
@@ -207,8 +203,7 @@ public class DAO {
 				}
 			}
 		}
-		System.out.println("Fehler bei ziehen des Namens des Benutzers");
-		return "möp";
+		return "Fehler";
 	}
 	
 	public int getMaxWarteZeitsek() {
@@ -275,7 +270,6 @@ public class DAO {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		System.out.println("hash konnte nicht gebildet werden");
-		return "möp";
+		return "Fehler";
     }
 }

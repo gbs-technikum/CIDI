@@ -67,36 +67,13 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Sitzung Beenden":
 			this.guiDrive.goToLogin();
 			break;
-			
-		case "Zum Webshop": //Gibt es noch nicht
-			//Start internet Explorer -> Amazon oder sonst was
-			System.out.println("Ab zum Webshop!");
-			break;
-		
-		case "Vorwaerts":
-			System.out.println("Vorwärts schalten");
-			break;
-
-		case "Rueckwaerts":
-			System.out.println("Rueckwaerts schalten");
-			break;
-			
-		case "Links":
-			System.out.println("links schalten");
-			break;
-
-		case "Rechts":
-			System.out.println("rechts schalten");
-			break;
-			
+						
 		case "Fernlicht schalten":
-			System.out.println("Fernlicht schalten");
-			guiDrive.getFernlichtButton().pinTogglen();
+//			guiDrive.getFernlichtButton().pinTogglen();
 			break;
 			
 		case "Abblendlicht schalten":
-			System.out.println("Abblendlicht schalten");
-			guiDrive.getAbblendlichtButton().pinTogglen();
+//			guiDrive.getAbblendlichtButton().pinTogglen();
 			break;   
 		
 		default:

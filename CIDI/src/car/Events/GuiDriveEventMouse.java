@@ -97,8 +97,6 @@ public class GuiDriveEventMouse extends MouseAdapter{
 		}
 		
 		c.drive(c_VK_LEFT, c_VK_RIGHT, c_VK_UP, c_VK_DOWN, c_VK_F, c_VK_A);
-//		this.cb.bildSchaltenAus();
-//		this.cb.pinTogglen();
 		this.guiMain.requestFocus();
 	}
 }
