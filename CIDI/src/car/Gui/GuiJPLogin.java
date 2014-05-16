@@ -180,7 +180,7 @@ public class GuiJPLogin extends JPanel{
 	    cStreambereich = new Canvas();
 //	    cStreambereich.setSize(300, 200);
 //	    cStreambereich.setBackground(Color.GREEN);
-	    Player.startPlayer(cStreambereich);
+//	    Player.startPlayer(cStreambereich);
 	    
 	    JPanel jpWarteZeit = new JPanel();
 	    JLabel jlWartenText = new JLabel("Verbleibende Wartezeit ");

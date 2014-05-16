@@ -77,7 +77,7 @@ public class GuiJFrameMain extends JFrame{
 	private void initEvents() {
 		new GuiDriveEventAction(this);
 
-		this.addWindowListener(new GuiDriveWindowEvent(this.db));
+		this.addWindowListener(new GuiDriveWindowEvent(this.db,this));
 	}	
 
 	//Zum schalten des JPanels zwischen den "ProgrammOberflächen"
