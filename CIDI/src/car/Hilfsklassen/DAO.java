@@ -1,5 +1,7 @@
 package car.Hilfsklassen;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,7 +29,7 @@ public class DAO {
 			pstlogout = con.prepareStatement("UPDATE sitzung SET endeSteuerung=NOW() WHERE id_sitzung=?");
 			pstwarteschlange = con.prepareStatement("SELECT * FROM benutzer WHERE useFlag=true");
 			pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE endeSteuerung='0000-00-00 00:00:00' GROUP BY(endeSteuerung)");
-			pstlogin = con.prepareStatement("SELECT id FROM benutzer WHERE nutzername=? AND passwort=PASSWORD(?)");
+			pstlogin = con.prepareStatement("SELECT id FROM benutzer WHERE nutzername=? AND passwort=?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,11 +51,10 @@ public class DAO {
 	public Boolean anmelden(String benutzername, String pw) {
 		try {
 			pstlogin.setString(1, benutzername);
-			pstlogin.setString(2, pw);
+			pstlogin.setString(2, sha1(benutzername + pw));
 			rst = pstlogin.executeQuery();
 			if( rst.next() ){
-				idNutzer = Integer.parseInt(rst.getString(1)); //geprÃ¼ft passt
-//				
+				idNutzer = Integer.parseInt(rst.getString(1)); //geprüft passt
 				switch (warteschlange()) {
 				case "leer":{
 					psteintragen = con.prepareStatement("INSERT INTO sitzung (id_benutzer, login, beginnSteuerung) VALUES(" + this.idNutzer + ", NOW(), NOW())");
@@ -71,9 +72,8 @@ public class DAO {
 					rst.close();
 					return true;
 					}
-
 				default:{
-					System.out.println("Problem: rÃ¼ckgabewert Warteschlange()!");
+					System.out.println("Problem: rückgabewert Warteschlange()!");
 					rst.close();
 					}
 				}
@@ -124,7 +124,7 @@ public class DAO {
 					pstlogout = con.prepareStatement("UPDATE benutzer SET useFlag=false WHERE id=" + this.idNutzer );
 					pstlogout.executeUpdate();
 		
-					//	Sitzung wird frei... chekcen wer in Warteschlange als nÃ¤chstes kommt und dann gleich buchen !!! -> Ab de lutzi!			
+					//	Sitzung wird frei... chekcen wer in Warteschlange als nächstes kommt und dann gleich buchen !!! -> Ab de lutzi!			
 					bucheNaechsten();
 					return true;
 				} else {
@@ -165,7 +165,7 @@ public class DAO {
 		if (rst.next()){
 			return rst.getInt(1);
 		}
-			return -1;	//WEnn s kein nÃ¤chsten gibt
+			return -1;	//WEnn s kein nächsten gibt
 	}
 
 	public void wartenAbbrechen(){
@@ -208,7 +208,7 @@ public class DAO {
 			}
 		}
 		System.out.println("Fehler bei ziehen des Namens des Benutzers");
-		return "mÃ¶p";
+		return "möp";
 	}
 	
 	public int getMaxWarteZeitsek() {
@@ -216,11 +216,11 @@ public class DAO {
 		try {
 				pstAnzUserVor = con.prepareStatement("SELECT TIMEDIFF(NOW(), beginnSteuerung), id_Sitzung FROM sitzung WHERE beginnSteuerung!='0000-00-00 00:00:00' AND endeSteuerung='0000-00-00 00:00:00'");
 				rst = pstAnzUserVor.executeQuery();
-				if( rst.next() ){  //Gibt es jemanden der FÃ¤hrt Und wenn wie lange darf er noch fahren?
+				if( rst.next() ){  //Gibt es jemanden der Fährt Und wenn wie lange darf er noch fahren?
 					String temp = rst.getString(1); //Zeit
 					sek = Integer.parseInt(temp.substring(6, 8)) + (Integer.parseInt(temp.substring(3, 5)) * 60); //sekunden + (minuten * 60)
 					//in var sek sind nun wartesekunden in int gespeichert
-					IdaktSitz = rst.getInt(2); //Gibt id der Sitzung der fÃ¤hrt
+					IdaktSitz = rst.getInt(2); //Gibt id der Sitzung der fährt
 					
 					if(idSitzung != -1){ //Wenn ich bereits warte habe ich eine Sitzung ID -> (isSitzung != -1) 
 						if(IdaktSitz == this.idSitzung){
@@ -228,7 +228,7 @@ public class DAO {
 						}
 						pstAnzUserVor = con.prepareStatement("SELECT COUNT(id_sitzung) FROM sitzung WHERE id_sitzung>" + IdaktSitz +" AND id_sitzung<"+ this.idSitzung);
 						rst = pstAnzUserVor.executeQuery();
-						if( rst.next() ){	 //Wie viele Leute mÃ¼ssen noch vor mir Warten -> faktor * 15
+						if( rst.next() ){	 //Wie viele Leute müssen noch vor mir Warten -> faktor * 15
 							anzSchlange = (rst.getInt(1));
 						}else{
 							//if-Anweisung z217 ob es nen faktor*15 gibt
@@ -261,5 +261,21 @@ public class DAO {
 		}
 		return -1;
 	}
-	
+
+    private String sha1(String input) {
+        MessageDigest mDigest;
+		try {
+			mDigest = MessageDigest.getInstance("SHA1");
+	        byte[] result = mDigest.digest(input.getBytes());
+	        StringBuffer sb = new StringBuffer();
+	        for (int i = 0; i < result.length; i++) {
+	            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+	        }
+	        return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		System.out.println("hash konnte nicht gebildet werden");
+		return "möp";
+    }
 }
