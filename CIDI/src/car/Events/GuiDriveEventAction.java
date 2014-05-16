@@ -67,14 +67,6 @@ public class GuiDriveEventAction implements ActionListener{
 		case "Sitzung Beenden":
 			this.guiDrive.goToLogin();
 			break;
-						
-		case "Fernlicht schalten":
-//			guiDrive.getFernlichtButton().pinTogglen();
-			break;
-			
-		case "Abblendlicht schalten":
-//			guiDrive.getAbblendlichtButton().pinTogglen();
-			break;   
 		
 		default:
 			break;
