@@ -132,13 +132,7 @@ public class GuiJFrameMain extends JFrame{
 	
 
 	public static void main(String[] args) {
-		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
-				"/usr/lib");
-		
-		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 		GuiJFrameMain g = new GuiJFrameMain();
-		
-
 	}
 
 	public DAO getDatenbank() {
